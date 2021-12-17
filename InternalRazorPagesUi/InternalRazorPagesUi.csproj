@@ -4,7 +4,6 @@
     <TargetFramework>net6.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <RootNamespace>internal_razor_pages_ui</RootNamespace>
   </PropertyGroup>
 
 </Project>
