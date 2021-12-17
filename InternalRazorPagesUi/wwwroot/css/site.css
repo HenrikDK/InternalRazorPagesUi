@@ -1,5 +1,4 @@
 /* general stuff */
-
 .grayish
 {
   color: #607d8b;
@@ -67,7 +66,7 @@
   text-decoration:none
 }
 
-.bd-links a:hover,.bd-links a:focus
+.bd-links a:hover
 {
   color: #03a9f3;
 }
@@ -86,12 +85,10 @@
 .bd-links .menu-toggle::after
 {
   position: absolute;
-  right: -3px;
+  right: 0px;
   width:1.25em;
   line-height:0;
   content:url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='rgba%280,0,0,.5%29' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M5 14l6-6-6-6'/%3e%3c/svg%3e");
-  transition:transform 0.35s ease;
-  transform-origin:.5em 50%
 }
 
 @media (prefers-reduced-motion: reduce)
@@ -100,11 +97,6 @@
   {
     transition:none
   }
-}
-
-.bd-links .menu-toggle[aria-expanded="true"]
-{
-  color: #03a9f3;
 }
 
 .bd-links .menu-toggle[aria-expanded="true"]::after
@@ -159,4 +151,10 @@
   width: 35px;
   text-align: left;
   z-index: 9;
+}
+
+.collapsing {
+  -webkit-transition: none;
+  transition: none;
+  display: none;
 }
