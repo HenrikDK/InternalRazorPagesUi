@@ -158,3 +158,23 @@
   transition: none;
   display: none;
 }
+
+.h1, .h2, .h3, .h4
+{
+  font-weight: 300;
+  line-height: 1.2;  
+}
+
+.form-check {
+  display: flex;
+  align-items: center;
+}
+.form-check label {
+  margin-left: 10px;
+  font-size: 18px;
+}
+.form-check .form-check-input[type=checkbox] {
+  border-radius: .25em;
+  height: 30px;
+  width: 30px;
+}
