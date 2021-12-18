@@ -1,0 +1,37 @@
+﻿@page "/select-table/"
+@model SelectModel
+@{
+    ViewBag.Title = "Tabulator with item selection";
+}
+
+<h1 class="display-4">@ViewBag.Title</h1>
+<p>Using a tabulator with item selection to enable multi select and batch operations.</p>
+
+<div id="select-table" class="vh-75"></div>
+
+<script>
+var table = new Tabulator("#select-table", 
+{
+    height:"75vh",
+    layout:"fitData",
+    persistence:true,
+    responsiveLayout:"hide",
+    ajaxURL:"./?handler=items", 
+    placeholder:"No Data Available",
+    movableColumns:true,
+    selectable:true,
+    initialSort:[
+        {column:"name", dir:"asc"},
+    ],
+    columns:[
+        {formatter:"rowSelection", titleFormatter:"rowSelection", hozAlign:"center", headerSort:false, cellClick:selectClick, width: 30},
+        {title:"Name", field:"name", sorter:"string", width:200},
+        {title:"Progress", field:"progress", hozAlign:"left", formatter:"progress"},
+        {title:"Gender", field:"gender", sorter:"string"},
+        {title:"Rating", field:"rating", formatter:"star", hozAlign:"center", width:100},
+        {title:"Favourite Color", field:"color", sorter:"string"},
+        {title:"Date Of Birth", field:"dateOfBirth", sorter:"date", hozAlign:"center"},
+        {title:"Driver", field:"driver", hozAlign:"center", formatter:"tickCross", sorter:"boolean"},
+    ],
+});
+</script>
