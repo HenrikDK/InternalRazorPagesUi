@@ -1,0 +1,76 @@
+﻿@page "/search-tables/"
+@model SearchModel
+@{
+    ViewBag.Title = "Multiple tables with search";
+}
+
+<div class="d-flex justify-content-between">
+    <div class="col-md">
+        <h2>@ViewBag.Title</h2>
+    </div>
+    <div class="col-md-5">
+        <div class="row justify-content-end">
+            <div class="col-md input-group rounded pt-1">
+                <span class="input-group-text border-0 bg-transparent" id="search-addon">
+                    <i class="fa fa-search"></i>
+                </span>
+                <input id="tableSearch" type="search" class="form-control rounded" placeholder="Search .." aria-label="Search" aria-describedby="search-addon"/>
+            </div>
+            <div class="col-md-4 form-check justify-content-end">
+                <input class="form-check-input" type="checkbox" name="flexRadioDefault" id="show-all-check">
+                <label class="form-check-label" for="show-all-check">Show all</label>
+            </div>
+        </div>
+    </div>
+</div>
+
+<p>Using multiple tabulators on the same page.</p>
+
+<h2>Lobsters</h2>
+<div id="lobster-table" class="vh-40"></div>
+
+<p>&nbsp;</p>
+<h2>Pirates</h2>
+<div id="pirate-table" class="vh-80"></div>
+
+<script>
+var lobsterTable = new Tabulator("#lobster-table", 
+{
+    height:"40vh",
+    layout:"fitData",
+    persistence:true,
+    persistenceMode:true,
+    rowFormatter:softDeleteFormatter,    
+    ajaxURL:"./?handler=lobsters", 
+    placeholder:"No Data Available",
+    columns:[
+        {title:"Name", field:"name", sorter:"string", width:200, headerMenu:headerMenu},
+        {title:"Progress", field:"progress", hozAlign:"left", formatter:"progress", headerMenu:headerMenu},
+        {title:"Gender", field:"gender", sorter:"string", headerMenu:headerMenu},
+        {title:"Rating", field:"rating", formatter:"star", hozAlign:"center", width:100, headerMenu:headerMenu},
+        {title:"Favourite Color", field:"color", sorter:"string", headerMenu:headerMenu},
+        {title:"Date Of Birth", field:"dateOfBirth", sorter:"date", hozAlign:"center", headerMenu:headerMenu},
+        {title:"Driver", field:"driver", hozAlign:"center", formatter:"tickCross", sorter:"boolean", headerMenu:headerMenu},
+    ],
+});
+
+var pirateTable = new Tabulator("#pirate-table", 
+{
+    height:"80vh",
+    layout:"fitData",
+    persistence:true,
+    persistenceMode:true,
+    rowFormatter:softDeleteFormatter,
+    ajaxURL:"./?handler=pirates", 
+    placeholder:"No Data Available",
+    columns:[
+        {title:"Name", field:"name", sorter:"string", width:200, headerMenu:headerMenu},
+        {title:"Progress", field:"progress", hozAlign:"left", formatter:"progress", headerMenu:headerMenu},
+        {title:"Gender", field:"gender", sorter:"string", headerMenu:headerMenu},
+        {title:"Rating", field:"rating", formatter:"star", hozAlign:"center", width:100, headerMenu:headerMenu},
+        {title:"Favourite Color", field:"color", sorter:"string", headerMenu:headerMenu},
+        {title:"Date Of Birth", field:"dateOfBirth", sorter:"date", hozAlign:"center", headerMenu:headerMenu},
+        {title:"Driver", field:"driver", hozAlign:"center", formatter:"tickCross", sorter:"boolean", headerMenu:headerMenu},
+    ],
+});
+</script>
