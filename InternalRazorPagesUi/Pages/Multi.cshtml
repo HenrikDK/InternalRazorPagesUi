@@ -1,0 +1,55 @@
+﻿@page "/multi-table/"
+@model MultiModel
+@{
+    ViewBag.Title = "Multiple tables on same page";
+}
+
+<h1 class="display-4">@ViewBag.Title</h1>
+<p>Using multiple tabulators on the same page.</p>
+
+<h2>Lobsters</h2>
+<div id="lobster-table" class="vh-40"></div>
+
+<p>&nbsp;</p>
+<h2>Pirates</h2>
+<div id="pirate-table" class="vh-80"></div>
+
+<script>
+var lobsterTable = new Tabulator("#lobster-table", 
+{
+    height:"40vh",
+    layout:"fitColumns",
+    persistence:true,
+    persistenceMode:true,
+    ajaxURL:"./?handler=lobsters", 
+    placeholder:"No Data Available",
+    columns:[
+        {title:"Name", field:"name", sorter:"string", width:200},
+        {title:"Progress", field:"progress", hozAlign:"left", formatter:"progress"},
+        {title:"Gender", field:"gender", sorter:"string"},
+        {title:"Rating", field:"rating", formatter:"star", hozAlign:"center", width:100},
+        {title:"Favourite Color", field:"color", sorter:"string"},
+        {title:"Date Of Birth", field:"dateOfBirth", sorter:"date", hozAlign:"center"},
+        {title:"Driver", field:"driver", hozAlign:"center", formatter:"tickCross", sorter:"boolean"},
+    ],
+});
+
+var pirateTable = new Tabulator("#pirate-table", 
+{
+    height:"80vh",
+    layout:"fitColumns",
+    persistence:true,
+    persistenceMode:true,
+    ajaxURL:"./?handler=pirates", 
+    placeholder:"No Data Available",
+    columns:[
+        {title:"Name", field:"name", sorter:"string", width:200},
+        {title:"Progress", field:"progress", hozAlign:"left", formatter:"progress"},
+        {title:"Gender", field:"gender", sorter:"string"},
+        {title:"Rating", field:"rating", formatter:"star", hozAlign:"center", width:100},
+        {title:"Favourite Color", field:"color", sorter:"string"},
+        {title:"Date Of Birth", field:"dateOfBirth", sorter:"date", hozAlign:"center"},
+        {title:"Driver", field:"driver", hozAlign:"center", formatter:"tickCross", sorter:"boolean"},
+    ],
+});
+</script>
