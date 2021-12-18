@@ -11,4 +11,5 @@ public class Item
     public int Progress { get; set; }
     public string DateOfBirth { get; set; } = "";
     public bool Driver { get; set; }
+    public bool isDelete { get; set; } = false;
 }
