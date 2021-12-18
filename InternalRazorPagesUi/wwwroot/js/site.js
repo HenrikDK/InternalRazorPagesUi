@@ -1,6 +1,14 @@
 ﻿$( document ).ready(function() {
+    updateNavBar();
     restoreSidebarMenu();
 });
+
+function updateNavBar() {
+    var url = window.location;
+    $('a.nav-link').filter(function() {
+        return this.href == url && !this.classList.contains("dropdown-toggle");
+    }).addClass('active');
+};
 
 function persistSideBarState() {
     var menuItems = $('.menu-toggle').map(function () {
