@@ -1,6 +1,9 @@
-$( document ).ready(function() {
+﻿$( document ).ready(function() {
     updateNavBar();
     restoreSidebarMenu();
+    getTabulators();
+    restoreTableSearch();
+    setupShowAllControl();
 });
 
 function updateNavBar() {
@@ -201,4 +204,38 @@ function matchAll(data, filterParams) {
     })
     
     return !matches.includes(false);
+}
+
+var showAll = false;
+
+function setupShowAllControl()
+{
+    var control = document.getElementById("show-all-check");
+    if (control){
+        var checked = window.localStorage.getItem(window.location + '-show-all');
+        showAll = checked === "true";
+        control.checked = showAll;
+        control.addEventListener("change", showAllChange);
+    }
+}
+
+function showAllChange()
+{
+    showAll = document.getElementById("show-all-check").checked
+    window.localStorage.setItem(window.location + '-show-all', showAll);
+    tables.forEach(x => x.redraw(true));
+}
+
+function softDeleteFormatter(row)
+{
+    var data = row.getData();
+    
+    if(data.isDelete && showAll)
+    {
+        row.getElement().classList.add("text-muted")
+        row.getElement().hidden = false
+    } 
+    else if (data.isDelete){
+        row.getElement().hidden = true
+    }
 }
