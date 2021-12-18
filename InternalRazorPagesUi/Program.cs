@@ -7,6 +7,9 @@ builder.WebHost.UseUrls("http://*:80/");
 
 var app = builder.Build();
 
+app.UseStatusCodePages();
+app.UseStatusCodePagesWithReExecute("/Status{0}");
+
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
