@@ -4,7 +4,7 @@
     ViewBag.Title = "Tabulator with breakout editing";
 }
 
-<h1 class="display-4">@ViewBag.Title</h1>
+<h2>@ViewBag.Title</h2>
 <p>Using a tabulator with break out editing functionality (cliking each item opens a new window).</p>
 
 <div id="breakout-table" class="vh-75"></div>
@@ -13,10 +13,9 @@
 var table = new Tabulator("#breakout-table", 
 {
     height:"75vh",
-    layout:"fitColumns",
+    layout:"fitData",
     persistence:true,
     persistenceMode:true,
-    responsiveLayout:"hide",
     ajaxURL:"./?handler=items", 
     placeholder:"No Data Available",
     movableColumns:true,
@@ -26,13 +25,13 @@ var table = new Tabulator("#breakout-table",
         {column:"name", dir:"asc"},
     ],
     columns:[
-        {title:"Name", field:"name", sorter:"string", width:200},
-        {title:"Progress", field:"progress", hozAlign:"left", formatter:"progress"},
-        {title:"Gender", field:"gender", sorter:"string"},
-        {title:"Rating", field:"rating", formatter:"star", hozAlign:"center", width:100},
-        {title:"Favourite Color", field:"color", sorter:"string"},
-        {title:"Date Of Birth", field:"dateOfBirth", sorter:"date", hozAlign:"center"},
-        {title:"Driver", field:"driver", hozAlign:"center", formatter:"tickCross", sorter:"boolean"},
+        {title:"Name", field:"name", sorter:"string", width:200, headerMenu:headerMenu},
+        {title:"Progress", field:"progress", hozAlign:"left", formatter:"progress", headerMenu:headerMenu},
+        {title:"Gender", field:"gender", sorter:"string", headerMenu:headerMenu},
+        {title:"Rating", field:"rating", formatter:"star", hozAlign:"center", width:100, headerMenu:headerMenu},
+        {title:"Favourite Color", field:"color", sorter:"string", headerMenu:headerMenu},
+        {title:"Date Of Birth", field:"dateOfBirth", sorter:"date", hozAlign:"center", headerMenu:headerMenu},
+        {title:"Driver", field:"driver", hozAlign:"center", formatter:"tickCross", sorter:"boolean", headerMenu:headerMenu},
     ],
 });
 </script>

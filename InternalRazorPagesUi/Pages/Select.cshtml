@@ -4,7 +4,7 @@
     ViewBag.Title = "Tabulator with item selection";
 }
 
-<h1 class="display-4">@ViewBag.Title</h1>
+<h2>@ViewBag.Title</h2>
 <p>Using a tabulator with item selection to enable multi select and batch operations.</p>
 
 <div id="select-table" class="vh-75"></div>
@@ -15,7 +15,7 @@ var table = new Tabulator("#select-table",
     height:"75vh",
     layout:"fitData",
     persistence:true,
-    responsiveLayout:"hide",
+    persistenceMode:true,
     ajaxURL:"./?handler=items", 
     placeholder:"No Data Available",
     movableColumns:true,
@@ -25,13 +25,13 @@ var table = new Tabulator("#select-table",
     ],
     columns:[
         {formatter:"rowSelection", titleFormatter:"rowSelection", hozAlign:"center", headerSort:false, cellClick:selectClick, width: 30},
-        {title:"Name", field:"name", sorter:"string", width:200},
-        {title:"Progress", field:"progress", hozAlign:"left", formatter:"progress"},
-        {title:"Gender", field:"gender", sorter:"string"},
-        {title:"Rating", field:"rating", formatter:"star", hozAlign:"center", width:100},
-        {title:"Favourite Color", field:"color", sorter:"string"},
-        {title:"Date Of Birth", field:"dateOfBirth", sorter:"date", hozAlign:"center"},
-        {title:"Driver", field:"driver", hozAlign:"center", formatter:"tickCross", sorter:"boolean"},
+        {title:"Name", field:"name", sorter:"string", width:200, headerMenu:headerMenu},
+        {title:"Progress", field:"progress", hozAlign:"left", formatter:"progress", headerMenu:headerMenu},
+        {title:"Gender", field:"gender", sorter:"string", headerMenu:headerMenu},
+        {title:"Rating", field:"rating", formatter:"star", hozAlign:"center", width:100, headerMenu:headerMenu},
+        {title:"Favourite Color", field:"color", sorter:"string", headerMenu:headerMenu},
+        {title:"Date Of Birth", field:"dateOfBirth", sorter:"date", hozAlign:"center", headerMenu:headerMenu},
+        {title:"Driver", field:"driver", hozAlign:"center", formatter:"tickCross", sorter:"boolean", headerMenu:headerMenu},
     ],
 });
 </script>
