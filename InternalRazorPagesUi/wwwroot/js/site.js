@@ -140,3 +140,65 @@ var headerMenu = function(){
 
     return menu;
 };
+
+var tables = [];
+
+function getTabulators() 
+{
+    for ( var i in window ) {
+        if (window[i] instanceof Tabulator){
+            tables.push(window[i]);
+        }
+    }
+}
+
+function searchTables(event){
+    var search = document.getElementById("tableSearch").value;
+    if (tables[0])
+    {
+        window.localStorage.setItem(tables[0].element.id + '-search', search)
+    }
+
+    if (search.length === 0){
+        clearSearch();
+        return;
+    }
+    
+    tables.forEach(x => x.setFilter(matchAll, { value: search }))
+}
+
+function clearSearch(){
+    tables.forEach(x => x.clearFilter())
+}
+
+function restoreTableSearch(){
+    var searchBox = document.getElementById("tableSearch");
+    if (searchBox){
+        var search = window.localStorage.getItem(tables[0].element.id + '-search');
+        if (search && search.length > 0){
+            searchBox.value = search;
+            tables.forEach(x => x.setFilter(matchAll, { value: search }))
+        }
+        searchBox.addEventListener("search", searchTables);
+    }
+}
+
+function matchAll(data, filterParams) {
+    //data - the data for the row being filtered
+    //filterParams - params object passed to the filter
+    //RegExp - modifier "i" - case insensitve
+
+    var terms = filterParams.value.split(' ').map(x => RegExp("\\b" + x + "\\b",'i'))
+    
+    var matches = terms.map(r => {
+        var match = false;
+        for (var key in data) {
+            if (r.test(data[key]) == true) {
+                match = true;
+            }
+        }
+        return match;
+    })
+    
+    return !matches.includes(false);
+}
