@@ -1,4 +1,4 @@
-﻿@page "/table-inline/"
+﻿@page "/inline-table/"
 @model InlineModel
 @{
     ViewBag.Title = "Tabulator with inline editing";
@@ -17,6 +17,7 @@ var table = new Tabulator("#inline-table",
     persistence:true,
     persistenceMode:true,
     ajaxURL:"./?handler=items", 
+    rowContextMenu: inlineRowMenu,
     placeholder:"No Data Available",
     columns:[
         {title:"Name", field:"name", sorter:"string", width:200, editor:true},
