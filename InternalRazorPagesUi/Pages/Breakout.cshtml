@@ -1,4 +1,4 @@
-﻿@page "/table-breakout/"
+﻿@page "/breakout-table/"
 @model BreakoutModel
 @{
     ViewBag.Title = "Tabulator with breakout editing";
@@ -20,7 +20,8 @@ var table = new Tabulator("#breakout-table",
     ajaxURL:"./?handler=items", 
     placeholder:"No Data Available",
     movableColumns:true,
-    resizableRows:true,
+    rowContextMenu: breakoutRowMenu,
+    rowClick: breakoutClick,
     initialSort:[
         {column:"name", dir:"asc"},
     ],
