@@ -3,7 +3,8 @@
     restoreSidebarMenu();
     getTabulators();
     restoreTableSearch();
-    setupShowAllControl();
+    restoreSelectFilter();
+    restoreShowAllControl();
 });
 
 function updateNavBar() {
@@ -159,7 +160,7 @@ function searchTables(event){
     var search = document.getElementById("tableSearch").value;
     if (tables[0])
     {
-        window.localStorage.setItem(tables[0].element.id + '-search', search)
+        window.localStorage.setItem('tabulator-' + tables[0].element.id + '-search', search)
     }
 
     if (search.length === 0){
@@ -177,7 +178,7 @@ function clearSearch(){
 function restoreTableSearch(){
     var searchBox = document.getElementById("tableSearch");
     if (searchBox){
-        var search = window.localStorage.getItem(tables[0].element.id + '-search');
+        var search = window.localStorage.getItem('tabulator-' + tables[0].element.id + '-search');
         if (search && search.length > 0){
             searchBox.value = search;
             tables.forEach(x => x.setFilter(matchAll, { value: search }))
@@ -208,7 +209,7 @@ function matchAll(data, filterParams) {
 
 var showAll = false;
 
-function setupShowAllControl()
+function restoreShowAllControl()
 {
     var control = document.getElementById("show-all-check");
     if (control){
@@ -238,4 +239,37 @@ function softDeleteFormatter(row)
     else if (data.isDelete){
         row.getElement().hidden = true
     }
+}
+
+function persistSelectFilters(filters, rows){
+    var columns = this.modules.filter.headerFilterColumns;
+    var filters = columns.map(function (x) {
+        if (x.component){
+            var values = x.component.getHeaderFilterValue();
+            if (values.length > 0){
+                var filters = values.split(',').map(h=> h.trim());
+                return {field: x.field, filter: filters}
+            }
+            return {field: x.field, filter:[]}
+        }
+    });
+    window.localStorage.setItem('tabulator-' + this.element.id + '-select-filters', JSON.stringify(filters));
+    return true;
+}
+
+function restoreSelectFilter(){
+    tables.forEach(t => {
+        var filters = JSON.parse(window.localStorage.getItem('tabulator-' + t.element.id + '-select-filters'));
+        var columns = t.modules.filter.headerFilterColumns;
+        filters.forEach(f => {
+            if (f.filter.length < 1){
+                return;
+            }
+            columns.forEach(c => {
+                if (c.field === f.field){
+                    c.component.setHeaderFilterValue(f.filter);
+                }
+            })
+        })
+    });
 }
