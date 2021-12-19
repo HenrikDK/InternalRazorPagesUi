@@ -1,0 +1,37 @@
+﻿@page "/column-filter-table/"
+@model ColumnFilterModel
+@{
+    ViewBag.Title = "Tabulator with column header filtering";
+}
+
+<h2>@ViewBag.Title</h2>
+<p>Using a tabulator with column header filtering and persistence accross requests.</p>
+
+<div id="column-filter-table" class="vh-75"></div>
+
+<script>
+var table = new Tabulator("#column-filter-table", 
+{
+    height:"75vh",
+    layout:"fitData",
+    persistence:true,
+    persistenceMode:true,
+    ajaxURL:"./?handler=items", 
+    placeholder:"No Data Available",
+    dataFiltered: persistSelectFilters,
+    movableColumns:true,
+    initialSort:[
+        {column:"name", dir:"asc"},
+    ],
+    columns:[
+        {title:"Name", field:"name", sorter:"string", width:200, headerMenu:headerMenu,
+        headerFilter: 'select', headerFilterFunc:"in", headerFilterParams: {values:true, sortValuesList:"asc", multiselect:true}},
+        {title:"Progress", field:"progress", hozAlign:"left", formatter:"progress", headerMenu:headerMenu},
+        {title:"Gender", field:"gender", sorter:"string", headerMenu:headerMenu},
+        {title:"Rating", field:"rating", formatter:"star", hozAlign:"center", width:100, headerMenu:headerMenu},
+        {title:"Favourite Color", field:"color", sorter:"string", headerMenu:headerMenu},
+        {title:"Date Of Birth", field:"dateOfBirth", sorter:"date", hozAlign:"center", headerMenu:headerMenu},
+        {title:"Driver", field:"driver", hozAlign:"center", formatter:"tickCross", sorter:"boolean", headerMenu:headerMenu},
+    ],
+});
+</script>
