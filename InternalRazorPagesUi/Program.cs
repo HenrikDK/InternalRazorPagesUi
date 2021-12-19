@@ -1,7 +1,13 @@
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddRazorPages();
+builder.Services
+    .AddRazorPages()
+    .AddRazorPagesOptions(options =>
+    {
+        options.Conventions.AddPageRoute("/ReverseProxy", "sp/{*url}");
+        options.Conventions.AddPageRoute("/ReverseProxy", "back-office/sp/{*url}");
+    });
 
 builder.WebHost.UseUrls("http://*:80/");
 
