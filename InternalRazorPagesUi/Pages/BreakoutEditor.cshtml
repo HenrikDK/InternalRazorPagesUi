@@ -1,0 +1,17 @@
+﻿@page "/breakout-table/{*url}"
+@using InternalRazorPagesUi.Model
+@model BreakoutEditorModel
+@{
+    ViewBag.Title = "A Fancy Editor";
+}
+
+@if (Model.EditMode is EditorMode.New or EditorMode.Edit)
+{
+    <h2>@ViewBag.Title</h2>
+    <p>bla bla.</p>
+    
+}
+else if (Model.EditMode is EditorMode.Delete)
+{
+    
+}
