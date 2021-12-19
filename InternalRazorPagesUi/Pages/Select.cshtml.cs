@@ -6,9 +6,9 @@ namespace InternalRazorPagesUi.Pages;
 
 public class SelectModel : PageModel
 {
-    private readonly ILogger<BreakoutModel> _logger;
+    private readonly ILogger<SelectModel> _logger;
 
-    public SelectModel(ILogger<BreakoutModel> logger)
+    public SelectModel(ILogger<SelectModel> logger)
     {
         _logger = logger;
     }
