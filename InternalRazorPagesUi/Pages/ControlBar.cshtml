@@ -1,0 +1,53 @@
+﻿@page "/control-bar-table/"
+@model ControlBarModel
+@{
+    ViewBag.Title = "Tabulator with control bar";
+}
+
+<h2>@ViewBag.Title</h2>
+<p>Using a tabulator with inline editing functionality (items can be edited inside the grid).</p>
+
+<div class="btn-toolbar justify-content-between" role="toolbar" aria-label="Table toolbar with multiple control groups">
+    <div class="btn-group" role="group" aria-label="Button group">
+        <button type="button" class="btn btn-outline-secondary">Crustacean</button>
+        <button type="button" class="btn btn-outline-secondary">Pirate</button>
+        <button type="button" class="btn btn-outline-secondary">Mummy</button>
+        <button type="button" class="btn btn-outline-secondary">Pet</button>
+    </div>
+    <div class="row" role="group" aria-label="Filter group">
+        <div class="col-md input-group rounded pt-1">
+            <span class="input-group-text border-0 bg-transparent" id="search-addon">
+                <i class="fa fa-search"></i>
+            </span>
+            <input id="tableSearch" type="search" class="form-control rounded" placeholder="Search .." aria-label="Search" aria-describedby="search-addon"/>
+        </div>
+    
+        <div class="col-md-4 form-check justify-content-end">
+            <input class="form-check-input" type="checkbox" name="flexRadioDefault" id="show-all-check">
+            <label class="form-check-label" for="show-all-check">Show all</label>
+        </div>
+    </div>
+</div>
+<div id="inline-table" class="vh-80"></div>
+
+<script>
+var table = new Tabulator("#inline-table", 
+{
+    height:"80vh",
+    layout:"fitData",
+    persistence:true,
+    persistenceMode:true,
+    ajaxURL:"./?handler=items", 
+    rowContextMenu: inlineRowMenu,
+    placeholder:"No Data Available",
+    columns:[
+        {title:"Name", field:"name", sorter:"string", width:200, editor:true, headerMenu:headerMenu},
+        {title:"Progress", field:"progress", hozAlign:"left", formatter:"progress", editor:true, headerMenu:headerMenu},
+        {title:"Gender", field:"gender", sorter:"string", editor:"select", editorParams:{values:["male", "female"]}, headerMenu:headerMenu},
+        {title:"Rating", field:"rating", formatter:"star", hozAlign:"center", width:100, editor:true, headerMenu:headerMenu},
+        {title:"Favourite Color", field:"color", sorter:"string", editor:true, headerMenu:headerMenu},
+        {title:"Date Of Birth", field:"dateOfBirth", sorter:"date", hozAlign:"center", editor:true, headerMenu:headerMenu},
+        {title:"Driver", field:"driver", hozAlign:"center", formatter:"tickCross", sorter:"boolean", editor:true, headerMenu:headerMenu},
+    ],
+});
+</script>
