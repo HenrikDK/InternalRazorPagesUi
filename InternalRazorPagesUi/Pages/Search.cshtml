@@ -1,7 +1,8 @@
-﻿@page "/search-tables/"
+﻿@page "/search-tables"
 @model SearchModel
 @{
     ViewBag.Title = "Multiple tables with search";
+    var currentUrl = @Url.RouteUrl(ViewContext.RouteData.Values);
 }
 
 <div class="d-flex justify-content-between">
@@ -41,7 +42,7 @@ var lobsterTable = new Tabulator("#lobster-table",
     persistence:true,
     persistenceMode:true,
     rowFormatter:softDeleteFormatter,    
-    ajaxURL:"./?handler=lobsters", 
+    ajaxURL:"@currentUrl?handler=lobsters", 
     placeholder:"No Data Available",
     columns:[
         {title:"Name", field:"name", sorter:"string", width:200, headerMenu:headerMenu},
@@ -61,7 +62,7 @@ var pirateTable = new Tabulator("#pirate-table",
     persistence:true,
     persistenceMode:true,
     rowFormatter:softDeleteFormatter,
-    ajaxURL:"./?handler=pirates", 
+    ajaxURL:"@currentUrl?handler=pirates", 
     placeholder:"No Data Available",
     columns:[
         {title:"Name", field:"name", sorter:"string", width:200, headerMenu:headerMenu},

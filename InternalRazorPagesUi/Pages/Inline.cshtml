@@ -1,7 +1,8 @@
-﻿@page "/inline-table/"
+﻿@page "/inline-table"
 @model InlineModel
 @{
     ViewBag.Title = "Tabulator with inline editing";
+    var currentUrl = @Url.RouteUrl(ViewContext.RouteData.Values);
 }
 
 <h2>@ViewBag.Title</h2>
@@ -16,7 +17,7 @@ var table = new Tabulator("#inline-table",
     layout:"fitData",
     persistence:true,
     persistenceMode:true,
-    ajaxURL:"./?handler=items", 
+    ajaxURL:"@currentUrl/?handler=items", 
     rowContextMenu: inlineRowMenu,
     placeholder:"No Data Available",
     columns:[

@@ -1,7 +1,8 @@
-﻿@page "/multi-table/"
+﻿@page "/multi-table"
 @model MultiModel
 @{
     ViewBag.Title = "Multiple tables on same page";
+    var currentUrl = @Url.RouteUrl(ViewContext.RouteData.Values);
 }
 
 <h2>@ViewBag.Title</h2>
@@ -21,7 +22,7 @@ var lobsterTable = new Tabulator("#lobster-table",
     layout:"fitData",
     persistence:true,
     persistenceMode:true,
-    ajaxURL:"./?handler=lobsters", 
+    ajaxURL:"@currentUrl?handler=lobsters", 
     placeholder:"No Data Available",
     columns:[
         {title:"Name", field:"name", sorter:"string", width:200, headerMenu:headerMenu},
@@ -40,7 +41,7 @@ var pirateTable = new Tabulator("#pirate-table",
     layout:"fitData",
     persistence:true,
     persistenceMode:true,
-    ajaxURL:"./?handler=pirates", 
+    ajaxURL:"@currentUrl/?handler=pirates", 
     placeholder:"No Data Available",
     columns:[
         {title:"Name", field:"name", sorter:"string", width:200, headerMenu:headerMenu},

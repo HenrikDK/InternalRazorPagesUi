@@ -1,7 +1,8 @@
-﻿@page "/breakout-table/"
+﻿@page "/breakout-table"
 @model BreakoutModel
 @{
     ViewBag.Title = "Tabulator with breakout editing";
+    var currentUrl = @Url.RouteUrl(ViewContext.RouteData.Values);
 }
 
 <h2>@ViewBag.Title</h2>
@@ -16,7 +17,7 @@ var table = new Tabulator("#breakout-table",
     layout:"fitData",
     persistence:true,
     persistenceMode:true,
-    ajaxURL:"./?handler=items", 
+    ajaxURL:"@currentUrl?handler=items", 
     placeholder:"No Data Available",
     movableColumns:true,
     rowContextMenu: breakoutRowMenu,

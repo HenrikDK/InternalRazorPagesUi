@@ -1,7 +1,8 @@
-﻿@page "/column-filter-table/"
+﻿@page "/column-filter-table"
 @model ColumnFilterModel
 @{
     ViewBag.Title = "Tabulator with column header filtering";
+    var currentUrl = @Url.RouteUrl(ViewContext.RouteData.Values);
 }
 
 <h2>@ViewBag.Title</h2>
@@ -16,7 +17,7 @@ var table = new Tabulator("#column-filter-table",
     layout:"fitData",
     persistence:true,
     persistenceMode:true,
-    ajaxURL:"./?handler=items", 
+    ajaxURL:"@currentUrl?handler=items", 
     placeholder:"No Data Available",
     dataFiltered: persistSelectFilters,
     movableColumns:true,

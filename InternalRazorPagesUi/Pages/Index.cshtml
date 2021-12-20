@@ -2,6 +2,7 @@
 @model IndexModel
 @{
     ViewBag.Title = "Welcome";
+    var currentUrl = @Url.RouteUrl(ViewContext.RouteData.Values);
 }
 
 <h2>@ViewBag.Title</h2>

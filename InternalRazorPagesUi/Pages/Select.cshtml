@@ -1,7 +1,8 @@
-﻿@page "/select-table/"
+﻿@page "/select-table"
 @model SelectModel
 @{
     ViewBag.Title = "Tabulator with item selection";
+    var currentUrl = @Url.RouteUrl(ViewContext.RouteData.Values);
 }
 
 <h2>@ViewBag.Title</h2>
@@ -16,7 +17,7 @@ var table = new Tabulator("#select-table",
     layout:"fitData",
     persistence:true,
     persistenceMode:true,
-    ajaxURL:"./?handler=items", 
+    ajaxURL:"@currentUrl?handler=items", 
     placeholder:"No Data Available",
     movableColumns:true,
     selectable:true,
