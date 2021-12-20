@@ -1,4 +1,4 @@
-﻿using InternalRazorPagesUi.Model.Queries;
+﻿using InternalRazorPagesUi.Model.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
@@ -7,17 +7,17 @@ namespace InternalRazorPagesUi.Pages;
 public class BreakoutModel : PageModel
 {
     private readonly ILogger<BreakoutModel> _logger;
-    private readonly IGetItems _getItems;
+    private readonly IItemRepository _itemRepository;
 
-    public BreakoutModel(ILogger<BreakoutModel> logger, IGetItems getItems)
+    public BreakoutModel(ILogger<BreakoutModel> logger, IItemRepository itemRepository)
     {
         _logger = logger;
-        _getItems = getItems;
+        _itemRepository = itemRepository;
     }
 
     public JsonResult OnGetItems()
     {
-        var items = _getItems.GetAll();
+        var items = _itemRepository.GetAll();
         return new JsonResult(items);
     }
     

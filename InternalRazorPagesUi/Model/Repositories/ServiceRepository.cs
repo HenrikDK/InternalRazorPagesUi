@@ -1,11 +1,11 @@
-namespace InternalRazorPagesUi.Model.Queries;
+namespace InternalRazorPagesUi.Model.Repositories;
 
-public interface IGetServices
+public interface IServiceRepository
 {
     IDictionary<string, string> Execute();
 }
     
-public class GetServices : IGetServices
+public class ServiceRepository : IServiceRepository
 { 
     List<(string service, string url)> _services = new()
     {

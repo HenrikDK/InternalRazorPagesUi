@@ -1,12 +1,15 @@
-namespace InternalRazorPagesUi.Model.Queries;
+namespace InternalRazorPagesUi.Model.Repositories;
 
-public interface IGetItems
+public interface IItemRepository
 {
     IList<Item> GetAll();
     Item GetBy(int id);
+    void Delete(int itemId);
+    void Insert(Item item);
+    void Update(Item item);
 }
-    
-public class GetItems : IGetItems
+
+public class ItemRepository : IItemRepository
 {
     List<Item> items = new()
     {
@@ -30,5 +33,17 @@ public class GetItems : IGetItems
     public Item GetBy(int id)
     {
         return items.FirstOrDefault(x => x.Id == id)!;
+    }
+
+    public void Delete(int itemId)
+    {
+    }
+
+    public void Insert(Item item)
+    {
+    }
+
+    public void Update(Item item)
+    {
     }
 }

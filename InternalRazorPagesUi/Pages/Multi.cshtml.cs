@@ -1,5 +1,5 @@
 ﻿using InternalRazorPagesUi.Model;
-using InternalRazorPagesUi.Model.Queries;
+using InternalRazorPagesUi.Model.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
@@ -8,23 +8,23 @@ namespace InternalRazorPagesUi.Pages;
 public class MultiModel : PageModel
 {
     private readonly ILogger<MultiModel> _logger;
-    private readonly IGetItems _getItems;
+    private readonly IItemRepository _itemRepository;
 
-    public MultiModel(ILogger<MultiModel> logger, IGetItems getItems)
+    public MultiModel(ILogger<MultiModel> logger, IItemRepository itemRepository)
     {
         _logger = logger;
-        _getItems = getItems;
+        _itemRepository = itemRepository;
     }
 
     public JsonResult OnGetPirates()
     {
-        var items = _getItems.GetAll();
+        var items = _itemRepository.GetAll();
         return new JsonResult(items);
     }
     
     public JsonResult OnGetLobsters()
     {
-        var items = _getItems.GetAll();
+        var items = _itemRepository.GetAll();
         return new JsonResult(items);
     }
     
