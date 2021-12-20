@@ -67,7 +67,7 @@
                 <div class="mb-3 row">
                     <label asp-for="Item.Rating" class="col-sm-3 col-form-label">Rating</label>
                     <div class="col-sm-7">
-                        <input asp-for="Item.Rating" class="form-control" min="1" max="4">
+                        <input asp-for="Item.Rating" class="form-control" min="1" max="5">
                     </div>
                 </div>
 
@@ -114,25 +114,30 @@
                         <button type="submit" class="btn btn-sm btn-outline-success"><span class="fa fa-archive"></span> Save.</button>
                     </div>
                 </div>
-
-                <br><br>
             </form>
         }
         else if (Model.EditMode is EditorMode.Delete)
         {
             <h2>@ViewBag.Title</h2>
-
             <br><br>
-            <form method="post">
-                <input asp-for="Item.Id" type="hidden"/>
-                <input asp-for="EditMode" type="hidden"/>
                 
-                <div class="btn-toolbar justify-content-end" role="toolbar">
-                    <div class="btn-group" role="group">
-                        <button type="submit" class="btn btn-sm btn-outline-danger" asp-page-handler="delete">Delete</button>
-                    </div>
+
+                <div class="d-flex justify-content-center">
+                    <p>Are you sure you want to delete the item?</p>
                 </div>
-            </form>
+                
+                <div class="btn-toolbar justify-content-evenly" role="toolbar">
+                    <button onclick="history.go(-1)" class="btn btn-sm btn-outline-primary">Cancel</button>
+                    <form method="post">
+                        <input asp-for="Item.Id" type="hidden"/>
+                        <input asp-for="EditMode" type="hidden"/>
+
+                        <button type="submit" class="btn btn-sm btn-outline-danger" asp-page-handler="delete">Delete</button>
+                    </form>
+                </div>
         }
     </div>
 </div>
+
+<br><br>
+<br><br>
