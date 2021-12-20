@@ -1,0 +1,38 @@
+﻿@page "/"
+@model SelectModel
+@{
+    ViewBag.Title = "Tabulator from another micro service";
+    var currentUrl = @Url.RouteUrl(ViewContext.RouteData.Values);
+}
+
+<h2>@ViewBag.Title</h2>
+<p>Tabulator from another micro service with item selection to enable multi select and batch operations.</p>
+
+<div id="microservice-table" class="vh-75"></div>
+
+<script>
+var table = new Tabulator("#microservice-table", 
+{
+    height:"75vh",
+    layout:"fitData",
+    persistence:true,
+    persistenceMode:true,
+    ajaxURL:"@currentUrl?handler=items", 
+    placeholder:"No Data Available",
+    movableColumns:true,
+    selectable:true,
+    initialSort:[
+        {column:"name", dir:"asc"},
+    ],
+    columns:[
+        {formatter:"rowSelection", titleFormatter:"rowSelection", hozAlign:"center", headerSort:false, cellClick:selectClick, width: 30},
+        {title:"Name", field:"name", sorter:"string", width:200, headerMenu:headerMenu},
+        {title:"Progress", field:"progress", hozAlign:"left", formatter:"progress", headerMenu:headerMenu},
+        {title:"Gender", field:"gender", sorter:"string", headerMenu:headerMenu},
+        {title:"Rating", field:"rating", formatter:"star", hozAlign:"center", width:100, headerMenu:headerMenu},
+        {title:"Favourite Color", field:"color", sorter:"string", headerMenu:headerMenu},
+        {title:"Date Of Birth", field:"dateOfBirth", sorter:"date", hozAlign:"center", headerMenu:headerMenu},
+        {title:"Driver", field:"driver", hozAlign:"center", formatter:"tickCross", sorter:"boolean", headerMenu:headerMenu},
+    ],
+});
+</script>
