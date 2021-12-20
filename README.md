@@ -8,7 +8,7 @@ This application is intended as a simple template for building internal applicat
 ## Features
 - ReverseProxy page to transparently integrate other UI MicroServices into main site.
 - Default 404 page
-- Minimal webapp using lamar DI
+- Minimal razor pages webapp using lamar DI
 
 ### Tabulator 4.9.3
 - Persistent tables with column selection, re-ordering, sort direction.
