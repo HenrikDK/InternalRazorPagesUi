@@ -34,20 +34,20 @@ function restoreSidebarMenu() {
 }
 
 function breakoutClick(e, row){
-    window.location = window.location + '' + row.getData().id;
+    window.location = window.location + '/' + row.getData().id;
 }
 
 var breakoutRowMenu = [
     {
         label:"<i class='fa fa-plus'></i> New",
         action:function(e, row){
-            window.location = window.location + 'new';
+            window.location = window.location + '/new';
         }
     },
     {
         label:"<i class='fa fa-clone'></i> Copy",
         action:function(e, row){
-            window.location = window.location + 'new?copyFrom=' + row.getData().id;
+            window.location = window.location + '/new?copyFrom=' + row.getData().id;
         }
     },
     {
@@ -56,7 +56,7 @@ var breakoutRowMenu = [
     {
         label:"<i class='fa fa-trash-o'></i> Delete",
         action:function(e, row){
-            window.location = window.location + '' + row.getData().id + '?handler=delete';
+            window.location = window.location + '/' + row.getData().id + '?handler=delete';
         }
     },
 ]
