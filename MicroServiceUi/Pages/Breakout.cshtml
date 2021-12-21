@@ -1,0 +1,38 @@
+﻿@page "/breakout"
+@model BreakoutModel
+@{
+    ViewBag.Title = "Tabulator with breakout editing";
+    var absoluteUrl = $@"{HttpContext.Request.Scheme}://{HttpContext.Request.Host}{Url.RouteUrl(ViewContext.RouteData.Values)}";
+}
+
+<h2>@ViewBag.Title</h2>
+<p>Using a tabulator with break out editing functionality (cliking each item opens a new window).</p>
+
+<div id="breakout" class="vh-75"></div>
+
+<script>
+var table = new Tabulator("#breakout", 
+{
+    height:"75vh",
+    layout:"fitData",
+    persistence:true,
+    persistenceMode:true,
+    ajaxURL:"@absoluteUrl?handler=items", 
+    placeholder:"No Data Available",
+    movableColumns:true,
+    rowContextMenu: breakoutRowMenu,
+    rowClick: breakoutClick,
+    initialSort:[
+        {column:"name", dir:"asc"},
+    ],
+    columns:[
+        {title:"Name", field:"name", sorter:"string", width:200, headerMenu:headerMenu},
+        {title:"Progress", field:"progress", hozAlign:"left", formatter:"progress", headerMenu:headerMenu},
+        {title:"Gender", field:"gender", sorter:"string", headerMenu:headerMenu},
+        {title:"Rating", field:"rating", formatter:"star", hozAlign:"center", width:100, headerMenu:headerMenu},
+        {title:"Favourite Color", field:"color", sorter:"string", headerMenu:headerMenu},
+        {title:"Date Of Birth", field:"dateOfBirth", sorter:"date", hozAlign:"center", headerMenu:headerMenu},
+        {title:"Driver", field:"driver", hozAlign:"center", formatter:"tickCross", sorter:"boolean", headerMenu:headerMenu},
+    ],
+});
+</script>

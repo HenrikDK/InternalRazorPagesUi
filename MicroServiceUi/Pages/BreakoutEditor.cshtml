@@ -1,0 +1,143 @@
+﻿@page "/breakout/{*url}"
+@using InternalRazorPagesUi.Model
+@model BreakoutEditorModel
+@{
+    ViewBag.Title = "A Fancy Editor";
+}
+
+<div class="container">
+    <div class="col-md-7 ps-4 pb-4">
+        @if (Model.EditMode is EditorMode.New or EditorMode.Edit)
+        {
+            <h2>@ViewBag.Title</h2>
+
+            <br><br>
+
+            <div class="btn-toolbar justify-content-between" role="toolbar">
+                <div class="btn-group" role="group">
+                    <button onclick="history.go(-1)" class="btn btn-sm btn-outline-secondary"><span class="fa fa-arrow-left"></span> Back</button>
+                </div>
+
+                <div class="btn-group " role="group">
+                    <form method="post">
+                        <input asp-for="Item.Id" type="hidden"/>
+                        <input asp-for="EditMode" type="hidden"/>
+
+                        @if (Model.Item.isDelete)
+                        {
+                            <button type="submit" class="btn btn-sm btn-outline-primary" asp-page-handler="restore">Restore</button>
+                        }
+                        else if (Model.EditMode is EditorMode.Edit)
+                        {
+                            <button type="submit" class="btn btn-sm btn-outline-danger" asp-page-handler="delete">Delete</button>
+                        }
+                    </form>
+                </div>
+            </div>
+            <form method="post">
+                <input asp-for="Item.Id" type="hidden"/>
+                <input asp-for="EditMode" type="hidden"/>
+
+                <br><br>
+
+                <div class="mb-3 row">
+                    <label asp-for="Item.Name" class="col-sm-3 col-form-label">Name</label>
+                    <div class="col-sm-7">
+                        <input asp-for="Item.Name" class="form-control">
+                    </div>
+                </div>
+
+                <div class="mb-3 row">
+                    <label asp-for="Item.Location" class="col-sm-3 col-form-label">Location</label>
+                    <div class="col-sm-7">
+                        <input asp-for="Item.Location" class="form-control">
+                    </div>
+                </div>
+
+                <div class="mb-3 row">
+                    <label asp-for="Item.Gender" class="col-sm-3 col-form-label">Gender</label>
+                    <div class="col-sm-7">
+                        <select asp-for="Item.Gender" class="form-control">
+                            <option value="male">male</option>
+                            <option value="female">female</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="mb-3 row">
+                    <label asp-for="Item.Rating" class="col-sm-3 col-form-label">Rating</label>
+                    <div class="col-sm-7">
+                        <input asp-for="Item.Rating" class="form-control" min="1" max="5">
+                    </div>
+                </div>
+
+                <div class="mb-3 row">
+                    <label asp-for="Item.Color" class="col-sm-3 col-form-label">Color</label>
+                    <div class="col-sm-7">
+                        <select asp-for="Item.Color" class="form-control">
+                            <option value="red">red</option>
+                            <option value="orange">orange</option>
+                            <option value="green">green</option>
+                            <option value="yellow">yellow</option>
+                            <option value="blue">blue</option>
+                            <option value="purple">purple</option>
+                            <option value="pink">pink</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="mb-3 row">
+                    <label asp-for="Item.Progress" class="col-sm-3 col-form-label">Progress</label>
+                    <div class="col-sm-7">
+                        <input asp-for="Item.Progress" class="form-control" min="0" max="100" maxlength="3">
+                    </div>
+                </div>
+
+                <div class="mb-3 row">
+                    <label asp-for="Item.DateOfBirth" class="col-sm-3 col-form-label">Date of birth</label>
+                    <div class="col-sm-7">
+                        <input asp-for="Item.DateOfBirth" class="form-control datepicker">
+                    </div>
+                </div>
+
+                <div class="mb-3 row">
+                    <label asp-for="Item.Driver" class="col-sm-3 col-form-label">Driver</label>
+                    <div class="col-sm-7 form-check">
+                        <input asp-for="Item.Driver" class="form-check-input">
+                    </div>
+                </div>
+
+                <br><br>
+
+                <div class="btn-toolbar justify-content-end" role="toolbar">
+                    <div class="btn-group" role="group">
+                        <button type="submit" class="btn btn-sm btn-outline-success"><span class="fa fa-archive"></span> Save.</button>
+                    </div>
+                </div>
+            </form>
+        }
+        else if (Model.EditMode is EditorMode.Delete)
+        {
+            <h2>@ViewBag.Title</h2>
+            <br><br>
+                
+
+                <div class="d-flex justify-content-center">
+                    <p>Are you sure you want to delete the item?</p>
+                </div>
+                
+                <div class="btn-toolbar justify-content-evenly" role="toolbar">
+                    <button onclick="history.go(-1)" class="btn btn-sm btn-outline-primary">Cancel</button>
+                    <form method="post">
+                        <input asp-for="Item.Id" type="hidden"/>
+                        <input asp-for="EditMode" type="hidden"/>
+
+                        <button type="submit" class="btn btn-sm btn-outline-danger" asp-page-handler="delete">Delete</button>
+                    </form>
+                </div>
+        }
+    </div>
+</div>
+
+<br><br>
+<br><br>
