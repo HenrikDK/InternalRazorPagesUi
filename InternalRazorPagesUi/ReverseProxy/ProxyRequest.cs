@@ -1,54 +1,64 @@
 using System.Net;
-using System.Text;
 using InternalRazorPagesUi.Model.Cache;
+using Microsoft.AspNetCore.Http.Extensions;
 
 namespace InternalRazorPagesUi.ReverseProxy
 {
-  public interface IReverseProxy
+  public interface IProxyRequest
   {
-      public Task<HttpResponseMessage> ProxyRequestToService(HttpContext context);
+      public Task<HttpResponseMessage> ProxyRequestToService(HttpContext context, string proxyPrefix = "/sp/");
   }
 
-  public class ReverseProxy : IReverseProxy
+  public class ProxyRequest : IProxyRequest
   {
     private readonly IGetServicesCached _getServices;
     private static readonly HttpClient _httpClient = new HttpClient();
     
-    public ReverseProxy(IGetServicesCached getServices)
+    public ProxyRequest(IGetServicesCached getServices)
     {
       _getServices = getServices;
     }
 
-    public async Task<HttpResponseMessage> ProxyRequestToService(HttpContext context)
+    public async Task<HttpResponseMessage> ProxyRequestToService(HttpContext context, string proxyPrefix = "/sp/")
     {
+      var proxyRequest = GetProxyRequest(context.Request, proxyPrefix);
+      if (proxyRequest.AbsoluteRequestUri == null) return new HttpResponseMessage {StatusCode = HttpStatusCode.NotFound};
       
-      var targetUri = BuildTargetUri(context.Request);
-      if (targetUri == null) return new HttpResponseMessage {StatusCode = HttpStatusCode.NotFound};
-      
-      var targetRequestMessage = CreateTargetMessage(context, targetUri);
-      using var responseMessage = await _httpClient.SendAsync(targetRequestMessage, HttpCompletionOption.ResponseHeadersRead, context.RequestAborted);
-      context.Response.StatusCode = (int)responseMessage.StatusCode;
+      var targetRequestMessage = CreateTargetMessage(context, proxyRequest.AbsoluteRequestUri);
+      var responseMessage = await _httpClient.SendAsync(targetRequestMessage, HttpCompletionOption.ResponseHeadersRead, context.RequestAborted);
+
       CopyFromTargetResponseHeaders(context, responseMessage);
-      await ProcessResponseContent(context, responseMessage);
+      
       return responseMessage;
     }
 
-    private Uri? BuildTargetUri(HttpRequest request)
+    private ProxyPath GetProxyRequest(HttpRequest request, string proxyPrefix)
     {
-      var segments = request.Path.ToString().Split("/");
-      var serviceRequest = segments.First();
+      var result = new ProxyPath();
       
+      var fullUrl = request.GetDisplayUrl();
+      var requestUrl = fullUrl[(fullUrl.IndexOf(proxyPrefix) + 4)..];
+      result.RequestPath = requestUrl;
+      
+      var prefix = fullUrl[(fullUrl.IndexOf("://") + 3)..(fullUrl.IndexOf(proxyPrefix) + 4)];
+      result.ControllerPrefixPath = prefix[(prefix.IndexOf("/") + 1)..];
+      
+      var segments = requestUrl.Split("/");
+      var serviceRequest = segments.First();
+      var services = _getServices.Execute();
+      if (!services.ContainsKey(serviceRequest)) return result;
+
       var remainingPath = "";
       if (segments.Length > 1)
       {
         var remaining = segments[1..^0];
-        remainingPath = string.Join(",", remaining);
+        remainingPath = string.Join("/", remaining);
       }
 
-      var services = _getServices.Execute();
-      if (!services.ContainsKey(serviceRequest)) return null;
-      var targetUri = new Uri(services[serviceRequest] + remainingPath);
-      return targetUri;
+      result.ServicePath = remainingPath;
+      result.ServiceAddress = services[serviceRequest];
+      result.AbsoluteRequestUri = new Uri(services[serviceRequest] + remainingPath);
+      return result;
     }
     
     private HttpRequestMessage CreateTargetMessage(HttpContext context, Uri targetUri)
@@ -105,36 +115,6 @@ namespace InternalRazorPagesUi.ReverseProxy
       if (HttpMethods.IsPut(method)) return HttpMethod.Put;
       if (HttpMethods.IsTrace(method)) return HttpMethod.Trace;
       return new HttpMethod(method);
-    }
-
-    
-    private async Task ProcessResponseContent(HttpContext context, HttpResponseMessage responseMessage)
-    {
-      var requestPath = context.Request.Path;
-      var content = await responseMessage.Content.ReadAsByteArrayAsync();
-
-      if (IsContentOfType(responseMessage, "text/html") || 
-          IsContentOfType(responseMessage, "text/javascript"))
-      {
-        var stringContent = Encoding.UTF8.GetString(content);
-        // TODO
-        var newContent = stringContent.Replace("https://www.google.com", requestPath);
-        await context.Response.WriteAsync(newContent, Encoding.UTF8);
-      } else {
-        await context.Response.Body.WriteAsync(content);
-      }
-    }
-    
-    private bool IsContentOfType(HttpResponseMessage responseMessage, string type)
-    {
-      var result = false;
-
-      if (responseMessage.Content?.Headers?.ContentType != null)
-      {
-        result = responseMessage.Content.Headers.ContentType.MediaType == type;
-      }
-
-      return result;
     }
   }
 }
