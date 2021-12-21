@@ -3,6 +3,10 @@ namespace MicroServiceUi.Model.Repositories;
 public interface IItemRepository
 {
     IList<Item> GetAll();
+    Item GetBy(int id);
+    void Delete(int itemId);
+    void Insert(Item item);
+    void Update(Item item);
 }
 
 public class ItemRepository : IItemRepository
@@ -29,5 +33,17 @@ public class ItemRepository : IItemRepository
     public Item GetBy(int id)
     {
         return items.FirstOrDefault(x => x.Id == id)!;
+    }
+    
+    public void Delete(int itemId)
+    {
+    }
+
+    public void Insert(Item item)
+    {
+    }
+
+    public void Update(Item item)
+    {
     }
 }
