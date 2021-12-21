@@ -1,5 +1,6 @@
 using System.Text;
 using System.Text.RegularExpressions;
+using Flurl;
 using Microsoft.AspNetCore.Html;
 
 namespace InternalRazorPagesUi.ReverseProxy
@@ -32,8 +33,8 @@ namespace InternalRazorPagesUi.ReverseProxy
         if (string.IsNullOrEmpty(content)) return result;
 
         var requestPath = "/" + proxyRequest.ControllerPrefixPath + proxyRequest.RequestPath;
-        content = content.Replace(proxyRequest.ServiceAddress, requestPath);
-        content = content.Replace("http://localhost", requestPath);
+        content = content.Replace(Url.Combine(proxyRequest.ServiceAddress, proxyRequest.ServicePath), requestPath);
+        content = content.Replace(Url.Combine("http://localhost", proxyRequest.ServicePath), requestPath);
 
         var matches = FormActions.Matches(content);
 
