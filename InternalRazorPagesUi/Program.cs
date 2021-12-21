@@ -1,4 +1,3 @@
-using InternalRazorPagesUi.Infrastructure;
 using Lamar.Microsoft.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,14 +14,12 @@ builder.Host
         registry.AddMemoryCache();
     });
 
-builder.Services.AddRazorPages()
-    .AddRazorPagesOptions(options =>
+builder.WebHost.UseKestrel()
+    .ConfigureServices(svc => svc.AddRazorPages(options =>
     {
         options.Conventions.AddPageRoute("/ReverseProxy", "sp/{*url}");
         options.Conventions.AddPageRoute("/ReverseProxy", "back-office/sp/{*url}");
-    });
-
-builder.WebHost.UseKestrel()
+    }))
     .UseUrls("http://*:80/");
 
 var app = builder.Build();
@@ -37,10 +34,8 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseStaticFiles();
-
 app.UseRouting();
 app.UseAuthorization();
-
 app.MapRazorPages();
 
 app.Run();
