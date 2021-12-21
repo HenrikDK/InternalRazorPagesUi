@@ -2,7 +2,7 @@
 @model SelectModel
 @{
     ViewBag.Title = "Tabulator from another micro service";
-    var currentUrl = @Url.RouteUrl(ViewContext.RouteData.Values);
+    var absoluteUrl = $@"{HttpContext.Request.Scheme}://{HttpContext.Request.Host}{Url.RouteUrl(ViewContext.RouteData.Values)}";
 }
 
 <h2>@ViewBag.Title</h2>
@@ -17,7 +17,7 @@ var table = new Tabulator("#microservice-table",
     layout:"fitData",
     persistence:true,
     persistenceMode:true,
-    ajaxURL:"@currentUrl?handler=items", 
+    ajaxURL:"@absoluteUrl?handler=items", 
     placeholder:"No Data Available",
     movableColumns:true,
     selectable:true,
