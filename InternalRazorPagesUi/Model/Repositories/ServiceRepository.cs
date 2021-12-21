@@ -10,7 +10,7 @@ public class ServiceRepository : IServiceRepository
     List<(string service, string url)> _services = new()
     {
         ("Orders", "http://localhost:8080"),
-        ("Inventory", "http://localhost:9090")
+        ("Inventory", "http://localhost:8080")
     };
     
     public IDictionary<string, string> Execute()
