@@ -36,7 +36,11 @@ namespace InternalRazorPagesUi.ReverseProxy
         content = content.Replace(Url.Combine(proxyRequest.ServiceAddress, proxyRequest.ServicePath), requestPath);
         content = content.Replace(Url.Combine("http://localhost", proxyRequest.ServicePath), requestPath);
 
-        var matches = FormActions.Matches(content);
+        content = Replace(FormActions, proxyRequest, content);
+        content = Replace(ButtonActions, proxyRequest, content);
+        content = Replace(InputActions, proxyRequest, content);
+        content = Replace(Links, proxyRequest, content);
+        content = Replace(Images, proxyRequest, content);
 
         var title = content[(content.IndexOf("<title") + 7)..(content.IndexOf("</title") - 1)];
         var body = content[(content.IndexOf("<body") + 6)..(content.IndexOf("</body") - 1)];
@@ -47,6 +51,28 @@ namespace InternalRazorPagesUi.ReverseProxy
       }
       
       return result;
+    }
+
+    private static string Replace(Regex regex, ProxyPath proxyRequest, string content)
+    {
+      var matches = regex.Matches(content);
+      
+      if (!matches.Any()) return content;
+
+      var sb = new StringBuilder(content);
+      
+      for (var i = matches.Count - 1; i >= 0; i--)
+      {
+        var original = matches[i].Groups[2].Value;
+        if (original.IndexOf("/") != 0) continue;
+        var index = matches[i].Groups[2].Index;
+        var length = matches[i].Groups[2].Length;
+        var replacement = Url.Combine(proxyRequest.RequestServicePath, original);
+
+        sb.Remove(index, length)
+          .Insert(index, replacement);
+      }
+      return sb.ToString();
     }
 
     private ContentType GetContentType(HttpResponseMessage responseMessage)
