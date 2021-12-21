@@ -1,4 +1,5 @@
 using Lamar.Microsoft.DependencyInjection;
+using Microsoft.AspNetCore.Mvc;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,6 +20,7 @@ builder.WebHost.UseKestrel()
     {
         options.Conventions.AddPageRoute("/ReverseProxy", "sp/{*url}");
         options.Conventions.AddPageRoute("/ReverseProxy", "back-office/sp/{*url}");
+        options.Conventions.ConfigureFilter(new IgnoreAntiforgeryTokenAttribute());
     }))
     .UseUrls("http://*:80/");
 
