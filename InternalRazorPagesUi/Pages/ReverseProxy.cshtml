@@ -1,3 +1,7 @@
-﻿@model ReverseProxyModel
+﻿@page "{*url}"
+@model ReverseProxyModel
+@{
+    ViewBag.Title = Model.Title;
+}
 
-@Html.Raw(Model.ResponseBody)
+@Model.ResponseBody
