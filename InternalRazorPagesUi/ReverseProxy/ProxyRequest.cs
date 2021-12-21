@@ -6,7 +6,7 @@ namespace InternalRazorPagesUi.ReverseProxy
 {
   public interface IProxyRequest
   {
-      public Task<HttpResponseMessage> ProxyRequestToService(HttpContext context, string proxyPrefix = "/sp/");
+      public Task<(ProxyPath, HttpResponseMessage)> RequestFromService(HttpContext context, string proxyPrefix = "/sp/");
   }
 
   public class ProxyRequest : IProxyRequest
@@ -19,17 +19,17 @@ namespace InternalRazorPagesUi.ReverseProxy
       _getServices = getServices;
     }
 
-    public async Task<HttpResponseMessage> ProxyRequestToService(HttpContext context, string proxyPrefix = "/sp/")
+    public async Task<(ProxyPath, HttpResponseMessage)> RequestFromService(HttpContext context, string proxyPrefix = "/sp/")
     {
       var proxyRequest = GetProxyRequest(context.Request, proxyPrefix);
-      if (proxyRequest.AbsoluteRequestUri == null) return new HttpResponseMessage {StatusCode = HttpStatusCode.NotFound};
+      if (proxyRequest.AbsoluteRequestUri == null) return (proxyRequest, new HttpResponseMessage {StatusCode = HttpStatusCode.NotFound});
       
       var targetRequestMessage = CreateTargetMessage(context, proxyRequest.AbsoluteRequestUri);
       var responseMessage = await _httpClient.SendAsync(targetRequestMessage, HttpCompletionOption.ResponseHeadersRead, context.RequestAborted);
 
       CopyFromTargetResponseHeaders(context, responseMessage);
       
-      return responseMessage;
+      return (proxyRequest, responseMessage);
     }
 
     private ProxyPath GetProxyRequest(HttpRequest request, string proxyPrefix)
