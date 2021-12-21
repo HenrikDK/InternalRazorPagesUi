@@ -44,17 +44,6 @@ namespace InternalRazorPagesUi.ReverseProxy
         result.Title = title;
         result.Content = content;
       }
-
-//      if (contentType == ContentType.TextHtml) return result;
-      
-/*      if (contentType == ContentType.TextJs)
-      { 
-        await context.Response.WriteAsync(result.Content, Encoding.UTF8); 
-      }
-      else 
-      { 
-        await context.Response.Body.WriteAsync(bytes); 
-      }*/
       
       return result;
     }
