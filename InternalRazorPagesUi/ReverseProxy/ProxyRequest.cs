@@ -1,4 +1,5 @@
 using System.Net;
+using Flurl;
 using InternalRazorPagesUi.Model.Cache;
 using Microsoft.AspNetCore.Http.Extensions;
 
@@ -12,7 +13,8 @@ namespace InternalRazorPagesUi.ReverseProxy
   public class ProxyRequest : IProxyRequest
   {
     private readonly IGetServicesCached _getServices;
-    private static readonly HttpClient _httpClient = new HttpClient();
+
+    private static readonly HttpClient _httpClient = new HttpClient(new HttpClientHandler { AllowAutoRedirect = false });
     
     public ProxyRequest(IGetServicesCached getServices)
     {
@@ -45,6 +47,8 @@ namespace InternalRazorPagesUi.ReverseProxy
       
       var segments = requestUrl.Split("/");
       var serviceRequest = segments.First();
+      result.RequestServicePath = Url.Combine("/", result.ControllerPrefixPath, serviceRequest);
+      
       var services = _getServices.Execute();
       if (!services.ContainsKey(serviceRequest)) return result;
 
@@ -57,7 +61,8 @@ namespace InternalRazorPagesUi.ReverseProxy
 
       result.ServicePath = remainingPath;
       result.ServiceAddress = services[serviceRequest];
-      result.AbsoluteRequestUri = new Uri(services[serviceRequest] + remainingPath);
+      var url = Url.Combine(result.ServiceAddress, remainingPath);
+      result.AbsoluteRequestUri = new Uri(url);
       return result;
     }
     
