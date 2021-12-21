@@ -31,6 +31,12 @@ public class ReverseProxyModel : PageModel
         {
             return new StatusCodeResult(404);
         }
+        
+        if (response.StatusCode == HttpStatusCode.Found)
+        {
+            var relativePath = Flurl.Url.Combine(proxyRequest.RequestServicePath, response.Headers.Location?.OriginalString);
+            return new RedirectResult(relativePath);
+        }
 
         var result = await _processResponse.ProcessAndExtract(HttpContext, response, proxyRequest);
         if (result.ContentType == ContentType.TextHtml)
@@ -54,6 +60,12 @@ public class ReverseProxyModel : PageModel
         if (response.StatusCode == HttpStatusCode.NotFound)
         {
             return new StatusCodeResult(404);
+        }
+
+        if (response.StatusCode == HttpStatusCode.Found)
+        {
+            var relativePath = Flurl.Url.Combine(proxyRequest.RequestServicePath, response.Headers.Location?.OriginalString);
+            return new RedirectResult(relativePath);
         }
 
         var result = await _processResponse.ProcessAndExtract(HttpContext, response, proxyRequest);
