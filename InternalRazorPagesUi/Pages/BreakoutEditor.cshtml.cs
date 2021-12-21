@@ -52,21 +52,7 @@ public class BreakoutEditorModel : PageModel
 
         return Page();
     }
-
-    private void SetEditMode(string url)
-    {
-        EditMode = EditorMode.Edit;
-        if (url.Contains("new"))
-        {
-            EditMode = EditorMode.New;
-        }
-
-        if (url.Contains("handler=delete"))
-        {
-            EditMode = EditorMode.Delete;
-        }
-    }
-
+    
     public IActionResult OnPost(string url)
     {
         SetEditMode(Request.GetDisplayUrl());
@@ -75,6 +61,15 @@ public class BreakoutEditorModel : PageModel
         {
             using var scope = new TransactionScope();
             _itemRepository.Delete(Item.Id);
+            scope.Complete();
+            return RedirectToPage("Breakout");
+        }
+        
+        if (EditMode is EditorMode.Restore)
+        {
+            using var scope = new TransactionScope();
+            Item.isDelete = false;
+            _itemRepository.Update(Item);
             scope.Complete();
             return RedirectToPage("Breakout");
         }
@@ -99,5 +94,24 @@ public class BreakoutEditorModel : PageModel
         }
         
         return RedirectToPage("Breakout");
+    }
+    
+    private void SetEditMode(string url)
+    {
+        EditMode = EditorMode.Edit;
+        if (url.Contains("new"))
+        {
+            EditMode = EditorMode.New;
+        }
+
+        if (url.Contains("handler=delete"))
+        {
+            EditMode = EditorMode.Delete;
+        }
+        
+        if (url.Contains("handler=restore"))
+        {
+            EditMode = EditorMode.Restore;
+        }
     }
 }
