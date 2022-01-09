@@ -2,22 +2,25 @@ using Lamar.Microsoft.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Host
-    .UseLamar((context, registry) =>
+builder.Host.UseLamar((context, registry) =>
+{
+    registry.Scan(x =>
     {
-        registry.Scan(x =>
-        {
-            x.AssemblyContainingType<Program>();
-            x.WithDefaultConventions();
-            x.LookForRegistries();
-        });
-        registry.AddMemoryCache();
+        x.AssemblyContainingType<Program>();
+        x.WithDefaultConventions();
+        x.LookForRegistries();
+    });
+});
+
+builder.WebHost
+    .ConfigureKestrel(x => x.ListenAnyIP(9080))
+    .ConfigureLogging((context, config) =>
+    {
+        config.ClearProviders();
+        config.AddSerilog();
     });
 
 builder.Services.AddRazorPages();
-
-builder.WebHost.UseKestrel()
-    .UseUrls("http://*:8080/");
 
 var app = builder.Build();
 
