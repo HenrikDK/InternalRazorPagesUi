@@ -1,28 +1,35 @@
-using Lamar.Microsoft.DependencyInjection;
-using Microsoft.AspNetCore.Mvc;
-
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Host
-    .UseLamar((context, registry) =>
+Log.Logger = new LoggerConfiguration()
+    .Enrich.FromLogContext()
+    .WriteTo.Console(new JsonFormatter())
+    .CreateLogger();
+
+builder.Host.UseLamar((context, registry) =>
+{
+    registry.Scan(x =>
     {
-        registry.Scan(x =>
-        {
-            x.AssemblyContainingType<Program>();
-            x.WithDefaultConventions();
-            x.LookForRegistries();
-        });
-        registry.AddMemoryCache();
+        x.AssemblyContainingType<Program>();
+        x.WithDefaultConventions();
+        x.LookForRegistries();
+    });
+});
+
+builder.WebHost
+    .ConfigureKestrel(x => x.ListenAnyIP(8080))
+    .ConfigureLogging((context, config) =>
+    {
+        config.ClearProviders();
+        config.AddSerilog();
     });
 
-builder.WebHost.UseKestrel()
-    .ConfigureServices(svc => svc.AddRazorPages(options =>
-    {
-        options.Conventions.AddPageRoute("/ReverseProxy", "sp/{*url}");
-        options.Conventions.AddPageRoute("/ReverseProxy", "back-office/sp/{*url}");
-        options.Conventions.ConfigureFilter(new IgnoreAntiforgeryTokenAttribute());
-    }))
-    .UseUrls("http://*:80/");
+builder.Services.AddMemoryCache();
+builder.Services.AddRazorPages(options =>
+{
+    options.Conventions.AddPageRoute("/ReverseProxy", "sp/{*url}");
+    options.Conventions.AddPageRoute("/ReverseProxy", "back-office/sp/{*url}");
+    options.Conventions.ConfigureFilter(new IgnoreAntiforgeryTokenAttribute());
+});
 
 var app = builder.Build();
 
@@ -39,5 +46,8 @@ app.UseStaticFiles();
 app.UseRouting();
 app.UseAuthorization();
 app.MapRazorPages();
+app.MapMetrics();
 
 app.Run();
+
+Log.CloseAndFlush();
