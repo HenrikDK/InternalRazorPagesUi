@@ -1,5 +1,3 @@
-using System.ComponentModel.DataAnnotations;
-
 namespace MicroServiceUi.Model;
 
 public class Item

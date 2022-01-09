@@ -1,4 +1,4 @@
-namespace InternalRazorPagesUi.Model;
+namespace MicroServiceUi.Model;
 
 public enum EditorMode
 {
