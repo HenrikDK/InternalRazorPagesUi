@@ -1,5 +1,3 @@
-using Microsoft.AspNetCore.Html;
-
 namespace InternalRazorPagesUi.ReverseProxy;
 
 public class ProxyResult

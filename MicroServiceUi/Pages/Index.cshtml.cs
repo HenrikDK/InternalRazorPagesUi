@@ -1,6 +1,4 @@
 ﻿using MicroServiceUi.Model.Repositories;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace MicroServiceUi.Pages;
 

@@ -1,6 +1,4 @@
 ﻿using InternalRazorPagesUi.Model.Repositories;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace InternalRazorPagesUi.Pages;
 

@@ -9,8 +9,8 @@ public class ServiceRepository : IServiceRepository
 { 
     List<(string service, string url)> _services = new()
     {
-        ("Orders", "http://localhost:8080"),
-        ("Inventory", "http://localhost:8080")
+        ("Orders", "http://localhost:9080"),
+        ("Inventory", "http://localhost:9080")
     };
     
     public IDictionary<string, string> Execute()

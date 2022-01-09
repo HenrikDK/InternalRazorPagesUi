@@ -1,9 +1,5 @@
-﻿using System.Transactions;
-using InternalRazorPagesUi.Model;
+﻿using InternalRazorPagesUi.Model;
 using InternalRazorPagesUi.Model.Repositories;
-using Microsoft.AspNetCore.Http.Extensions;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace InternalRazorPagesUi.Pages;
 

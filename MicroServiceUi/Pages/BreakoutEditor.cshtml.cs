@@ -1,10 +1,5 @@
-﻿using System.Transactions;
-using InternalRazorPagesUi.Model;
-using MicroServiceUi.Model;
+﻿using MicroServiceUi.Model;
 using MicroServiceUi.Model.Repositories;
-using Microsoft.AspNetCore.Http.Extensions;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace MicroServiceUi.Pages;
 

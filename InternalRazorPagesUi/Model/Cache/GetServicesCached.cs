@@ -1,5 +1,4 @@
 using InternalRazorPagesUi.Model.Repositories;
-using Microsoft.Extensions.Caching.Memory;
 
 namespace InternalRazorPagesUi.Model.Cache;
 
