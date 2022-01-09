@@ -1,5 +1,3 @@
-using System.ComponentModel.DataAnnotations;
-
 namespace InternalRazorPagesUi.Model;
 
 public class Item

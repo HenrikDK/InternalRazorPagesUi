@@ -1,8 +1,4 @@
-﻿using System.Net;
-using InternalRazorPagesUi.ReverseProxy;
-using Microsoft.AspNetCore.Html;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
+﻿using InternalRazorPagesUi.ReverseProxy;
 
 namespace InternalRazorPagesUi.Pages;
 

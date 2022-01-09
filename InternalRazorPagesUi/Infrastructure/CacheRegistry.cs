@@ -1,5 +1,4 @@
 using InternalRazorPagesUi.Model.Cache;
-using Lamar;
 
 namespace InternalRazorPagesUi.Infrastructure;
 

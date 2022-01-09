@@ -1,105 +1,99 @@
-using System.Text;
-using System.Text.RegularExpressions;
-using Flurl;
-using Microsoft.AspNetCore.Html;
+namespace InternalRazorPagesUi.ReverseProxy;
 
-namespace InternalRazorPagesUi.ReverseProxy
+public interface IProcessResponse
 {
-  public interface IProcessResponse
-  {
-      public Task<ProxyResult> ProcessAndExtract(HttpContext context, HttpResponseMessage responseMessage, ProxyPath proxyRequest);
-  }
+  public Task<ProxyResult> ProcessAndExtract(HttpContext context, HttpResponseMessage responseMessage, ProxyPath proxyRequest);
+}
   
-  public class ProcessResponse : IProcessResponse
-  {
-    private static readonly Regex FormActions = new Regex("<\\s*form[^>]*\\s+action=([\"'])(.*?)\\1", RegexOptions.IgnoreCase);
-    private static readonly Regex ButtonActions = new Regex("<\\s*button[^>]*\\s+formaction=([\"'])(.*?)\\1", RegexOptions.IgnoreCase);
-    private static readonly Regex InputActions = new Regex("<\\s*input[^>]*\\s+formaction=([\"'])(.*?)\\1", RegexOptions.IgnoreCase);
-    private static readonly Regex Links = new Regex("<\\s*a[^>]*\\s+href=([\"'])(.*?)\\1", RegexOptions.IgnoreCase);
-    private static readonly Regex Images = new Regex("<\\s*img[^>]*\\s+src=([\"'])(.*?)\\1", RegexOptions.IgnoreCase);
+public class ProcessResponse : IProcessResponse
+{
+  private static readonly Regex FormActions = new Regex("<\\s*form[^>]*\\s+action=([\"'])(.*?)\\1", RegexOptions.IgnoreCase);
+  private static readonly Regex ButtonActions = new Regex("<\\s*button[^>]*\\s+formaction=([\"'])(.*?)\\1", RegexOptions.IgnoreCase);
+  private static readonly Regex InputActions = new Regex("<\\s*input[^>]*\\s+formaction=([\"'])(.*?)\\1", RegexOptions.IgnoreCase);
+  private static readonly Regex Links = new Regex("<\\s*a[^>]*\\s+href=([\"'])(.*?)\\1", RegexOptions.IgnoreCase);
+  private static readonly Regex Images = new Regex("<\\s*img[^>]*\\s+src=([\"'])(.*?)\\1", RegexOptions.IgnoreCase);
     
-    public async Task<ProxyResult> ProcessAndExtract(HttpContext context, HttpResponseMessage responseMessage, ProxyPath proxyRequest)
+  public async Task<ProxyResult> ProcessAndExtract(HttpContext context, HttpResponseMessage responseMessage, ProxyPath proxyRequest)
+  {
+    var result = new ProxyResult();
+    var bytes = await responseMessage.Content.ReadAsByteArrayAsync();
+    result.Bytes = bytes;
+
+    var contentType = GetContentType(responseMessage);
+    result.ContentType = contentType;
+
+    if (contentType is ContentType.TextHtml or ContentType.TextJs)
     {
-      var result = new ProxyResult();
-      var bytes = await responseMessage.Content.ReadAsByteArrayAsync();
-      result.Bytes = bytes;
+      var content = Encoding.UTF8.GetString(bytes);
+      if (string.IsNullOrEmpty(content)) return result;
 
-      var contentType = GetContentType(responseMessage);
-      result.ContentType = contentType;
+      var requestPath = "/" + proxyRequest.ControllerPrefixPath + proxyRequest.RequestPath;
+      content = content.Replace(Url.Combine(proxyRequest.ServiceAddress, proxyRequest.ServicePath), requestPath);
+      content = content.Replace(Url.Combine("http://localhost", proxyRequest.ServicePath), requestPath);
 
-      if (contentType is ContentType.TextHtml or ContentType.TextJs)
-      {
-        var content = Encoding.UTF8.GetString(bytes);
-        if (string.IsNullOrEmpty(content)) return result;
+      content = Replace(FormActions, proxyRequest, content);
+      content = Replace(ButtonActions, proxyRequest, content);
+      content = Replace(InputActions, proxyRequest, content);
+      content = Replace(Links, proxyRequest, content);
+      content = Replace(Images, proxyRequest, content);
 
-        var requestPath = "/" + proxyRequest.ControllerPrefixPath + proxyRequest.RequestPath;
-        content = content.Replace(Url.Combine(proxyRequest.ServiceAddress, proxyRequest.ServicePath), requestPath);
-        content = content.Replace(Url.Combine("http://localhost", proxyRequest.ServicePath), requestPath);
+      var title = content[(content.IndexOf("<title") + 7)..(content.IndexOf("</title") - 1)];
+      var body = content[(content.IndexOf("<body") + 6)..(content.IndexOf("</body") - 1)];
 
-        content = Replace(FormActions, proxyRequest, content);
-        content = Replace(ButtonActions, proxyRequest, content);
-        content = Replace(InputActions, proxyRequest, content);
-        content = Replace(Links, proxyRequest, content);
-        content = Replace(Images, proxyRequest, content);
-
-        var title = content[(content.IndexOf("<title") + 7)..(content.IndexOf("</title") - 1)];
-        var body = content[(content.IndexOf("<body") + 6)..(content.IndexOf("</body") - 1)];
-
-        result.Body = new HtmlString(body);
-        result.Title = title;
-        result.Content = content;
-      }
+      result.Body = new HtmlString(body);
+      result.Title = title;
+      result.Content = content;
+    }
       
-      return result;
-    }
+    return result;
+  }
 
-    private static string Replace(Regex regex, ProxyPath proxyRequest, string content)
-    {
-      var matches = regex.Matches(content);
+  private static string Replace(Regex regex, ProxyPath proxyRequest, string content)
+  {
+    var matches = regex.Matches(content);
       
-      if (!matches.Any()) return content;
+    if (!matches.Any()) return content;
 
-      var sb = new StringBuilder(content);
+    var sb = new StringBuilder(content);
       
-      for (var i = matches.Count - 1; i >= 0; i--)
-      {
-        var original = matches[i].Groups[2].Value;
-        if (original.IndexOf("/") != 0) continue;
-        var index = matches[i].Groups[2].Index;
-        var length = matches[i].Groups[2].Length;
-        var replacement = Url.Combine(proxyRequest.RequestServicePath, original);
-
-        sb.Remove(index, length)
-          .Insert(index, replacement);
-      }
-      return sb.ToString();
-    }
-
-    private ContentType GetContentType(HttpResponseMessage responseMessage)
+    for (var i = matches.Count - 1; i >= 0; i--)
     {
-      if(IsContentOfType(responseMessage, "text/html"))
-      {
-        return ContentType.TextHtml;
-      }
+      var original = matches[i].Groups[2].Value;
+      if (original.IndexOf("/") != 0) continue;
+      var index = matches[i].Groups[2].Index;
+      var length = matches[i].Groups[2].Length;
+      var replacement = Url.Combine(proxyRequest.RequestServicePath, original);
 
-      if (IsContentOfType(responseMessage, "text/javascript"))
-      {
-        return ContentType.TextJs;
-      }
-
-      return ContentType.Unknown;
+      sb.Remove(index, length)
+        .Insert(index, replacement);
     }
+    return sb.ToString();
+  }
 
-    private bool IsContentOfType(HttpResponseMessage responseMessage, string type)
+  private ContentType GetContentType(HttpResponseMessage responseMessage)
+  {
+    if(IsContentOfType(responseMessage, "text/html"))
     {
-      var result = false;
-
-      if (responseMessage.Content?.Headers?.ContentType != null)
-      {
-        result = responseMessage.Content.Headers.ContentType.MediaType == type;
-      }
-
-      return result;
+      return ContentType.TextHtml;
     }
+
+    if (IsContentOfType(responseMessage, "text/javascript"))
+    {
+      return ContentType.TextJs;
+    }
+
+    return ContentType.Unknown;
+  }
+
+  private bool IsContentOfType(HttpResponseMessage responseMessage, string type)
+  {
+    var result = false;
+
+    if (responseMessage.Content?.Headers?.ContentType != null)
+    {
+      result = responseMessage.Content.Headers.ContentType.MediaType == type;
+    }
+
+    return result;
   }
 }

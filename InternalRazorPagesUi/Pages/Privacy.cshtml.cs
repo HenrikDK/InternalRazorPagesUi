@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc.RazorPages;
-
-namespace InternalRazorPagesUi.Pages;
+﻿namespace InternalRazorPagesUi.Pages;
 
 public class PrivacyModel : PageModel
 {
