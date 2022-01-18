@@ -1,5 +1,5 @@
 # InternalRazorPagesUi
-.Net Razor Pages is extremly efficient for building internal web applications that don't require heavy use of javascript for highlevels of interactivity.
+.Net Razor Pages is extremely efficient for building internal web applications that don't require heavy use of javascript for high levels of interactivity.
 
 These applications can typically rely on simple serverside rendering to get results out quickly while remaining open for extension by adding custom javascript and publicly available components as the application matures.
 
@@ -16,11 +16,11 @@ This application is intended as a simple template for building internal applicat
 - Pluggable persistent search control filtering multiple tables on a single page 
 - Inline editing of data in a table
 - Breakout editing of data from a table
-- Persistent filtering of table contents accross requests based on multi-select table header controler
+- Persistent filtering of table contents across requests based on multi-select table header controller
 
 ### Bootstrap 5
 - SideBar and NavBar implemented using HTML Grid based layout.
-- Persistent SideBar state accross requests using localStoage
+- Persistent SideBar state across requests using localStorage
 - NavBar highlighting based on URL
 - Placeholder for User Login
 - Breakout editor using different bootstrap controls
