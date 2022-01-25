@@ -271,6 +271,7 @@ function restoreSelectFilter(){
     tables.forEach(t => {
         var filters = JSON.parse(window.localStorage.getItem('tabulator-' + t.element.id + '-select-filters'));
         var columns = t.modules.filter.headerFilterColumns;
+        if (!filters) return;
         filters.forEach(f => {
             if (f.filter.length < 1){
                 return;
