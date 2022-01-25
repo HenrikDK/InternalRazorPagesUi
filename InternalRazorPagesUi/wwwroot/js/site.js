@@ -1,4 +1,4 @@
-$( document ).ready(function() {
+﻿$( document ).ready(function() {
     updateNavBar();
     restoreSidebarMenu();
     getTabulators();
@@ -61,47 +61,58 @@ var breakoutRowMenu = [
     },
 ]
 
-var inlineRowMenu = [
-    {
-        label:"<i class='fa fa-plus'></i> New",
-        action:function(e, row){
-            row.getTable().addRow();
-        }
-    },
-    {
-        label:"<i class='fa fa-clone'></i> Copy",
-        action:function(e, row){
-            var existing = row.getData();
-            var newRow = {};
-            for (const property in existing) {
-                if (property != "id"){
-                    newRow[property] = existing[property]
-                }
+function inlineRowMenu(component, e){
+    //component - column/cell/row component that triggered the menu
+    //e - click event object
+    
+    var menu = [
+        {
+            label:"<i class='fa fa-plus'></i> New",
+            action:function(e, row){
+                row.getTable().addRow();
             }
-            
-            row.getTable().addRow(newRow)
-        }
-    },
-    {
-        separator:true,
-    },
-    {
-        label:"<i class='fa fa-trash-o'></i> Delete",
-        action:function(e, row){
+        },
+        {
+            label:"<i class='fa fa-clone'></i> Copy",
+            action:function(e, row){
+                var existing = row.getData();
+                var newRow = {};
+                for (const property in existing) {
+                    if (property != "id"){
+                        newRow[property] = existing[property]
+                    }
+                }
+
+                row.getTable().addRow(newRow)
+            }
+        },
+        {
+            separator:true,
+        },
+    ]
+    
+    if(!component.getData().isDelete){
+        menu.push({
+            label: "<i class='fa fa-trash-o'></i> Delete",
+            action: function(e, row){
             var data = row.getData();
             data.isDelete = true;
-            row.update(data);
-        }
-    },
+            row.update(data);}
+        });
+    }
+    else
     {
-        label:"<i class='fa fa-recycle'></i> Restore",
-        action:function(e, row){
-            var data = row.getData();
-            data.isDelete = false;
-            row.update(data);
-        }
-    },
-]
+        menu.push({
+            label:"<i class='fa fa-recycle'></i> Restore",
+            action:function(e, row){
+                var data = row.getData();
+                data.isDelete = false;
+                row.update(data);}
+        });
+    }
+
+    return menu;
+}
 
 function selectClick(e, cell)
 {
@@ -248,6 +259,10 @@ function softDeleteFormatter(row)
     } 
     else if (data.isDelete){
         row.getElement().hidden = true
+    }
+    
+    if (!data.isDelete && row.getElement().classList.contains("text-muted")){
+        row.getElement().classList.remove("text-muted")
     }
 }
 
