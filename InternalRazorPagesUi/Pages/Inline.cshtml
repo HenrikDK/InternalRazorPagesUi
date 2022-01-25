@@ -24,7 +24,7 @@
             <input id="tableSearch" type="search" class="form-control rounded" placeholder="Search .." aria-label="Search" aria-describedby="search-addon"/>
         </div>
 
-        <div class="col-md-2 form-check">
+        <div class="col-md-3 form-check">
             <input class="form-check-input" type="checkbox" name="flexRadioDefault" id="show-all-check">
             <label class="form-check-label" for="show-all-check">Show all</label>
         </div>
@@ -58,7 +58,7 @@ var table = new Tabulator("#inline-table",
 });
 
 $('#btnSave').click(function (){
-    var updatedRows = JSON.stringify(table.getDate());
+    var updatedRows = JSON.stringify(table.getData());
     
     $.ajax({
         type: "POST",
@@ -75,4 +75,7 @@ $('#btnSave').click(function (){
     });    
 });
 
+$('#btnNew').click(function (){
+    table.addRow()
+});
 </script>
