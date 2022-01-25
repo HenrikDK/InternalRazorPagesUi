@@ -1,4 +1,4 @@
-@page "/inline-table"
+﻿@page "/inline-table"
 @model InlineModel
 @{
     ViewBag.Title = "Tabulator with inline editing";
@@ -56,4 +56,23 @@ var table = new Tabulator("#inline-table",
         {title:"Driver", field:"driver", hozAlign:"center", formatter:"tickCross", sorter:"boolean", editor:true, headerMenu:headerMenu},
     ],
 });
+
+$('#btnSave').click(function (){
+    var updatedRows = JSON.stringify(table.getDate());
+    
+    $.ajax({
+        type: "POST",
+        contentType: "application/json; charset=utf-8",
+        url: "@currentUrl",
+        data: updatedRows,
+        dataType: "json",
+        success: function (data){
+            table.replaceData()
+        },
+        error: function (jqXHR, textStatus, errorThrown){
+            alert("Save failed : " + jqXHR.responseText);
+        }
+    });    
+});
+
 </script>
