@@ -1,4 +1,4 @@
-﻿$( document ).ready(function() {
+$( document ).ready(function() {
     updateNavBar();
     restoreSidebarMenu();
     getTabulators();
@@ -88,7 +88,17 @@ var inlineRowMenu = [
     {
         label:"<i class='fa fa-trash-o'></i> Delete",
         action:function(e, row){
-            row.delete();
+            var data = row.getData();
+            data.isDelete = true;
+            row.update(data);
+        }
+    },
+    {
+        label:"<i class='fa fa-recycle'></i> Restore",
+        action:function(e, row){
+            var data = row.getData();
+            data.isDelete = false;
+            row.update(data);
         }
     },
 ]
