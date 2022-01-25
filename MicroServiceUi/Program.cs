@@ -1,5 +1,3 @@
-using Lamar.Microsoft.DependencyInjection;
-
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Host.UseLamar((context, registry) =>
@@ -20,7 +18,10 @@ builder.WebHost
         config.AddSerilog();
     });
 
-builder.Services.AddRazorPages();
+builder.Services.AddRazorPages(o =>
+{
+    o.Conventions.ConfigureFilter(new IgnoreAntiforgeryTokenAttribute());
+});
 
 var app = builder.Build();
 

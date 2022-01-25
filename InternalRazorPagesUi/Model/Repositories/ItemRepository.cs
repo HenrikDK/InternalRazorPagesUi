@@ -3,10 +3,16 @@ namespace InternalRazorPagesUi.Model.Repositories;
 public interface IItemRepository
 {
     IList<Item> GetAll();
+    void DeleteAll(IList<Item> items);
+    void InsertAll(IList<Item> items);
+    void UpdateAll(IList<Item> items);
+    void RestoreAll(IList<Item> items);
+
     Item GetBy(int id);
-    void Delete(int itemId);
-    void Insert(Item item);
+    void Delete(Item item);
     void Update(Item item);
+    void Insert(Item item);
+    void Restore(Item item);
 }
 
 public class ItemRepository : IItemRepository
@@ -29,21 +35,49 @@ public class ItemRepository : IItemRepository
     {
         return items;
     }
-    
+
+    public void DeleteAll(IList<Item> items)
+    {
+        // Place holder
+    }
+
+    public void InsertAll(IList<Item> items)
+    {
+        // Place holder
+    }
+
+    public void UpdateAll(IList<Item> items)
+    {
+        // Place holder
+    }
+
+    public void RestoreAll(IList<Item> items)
+    {
+        // Place holder
+    }
+
     public Item GetBy(int id)
     {
         return items.FirstOrDefault(x => x.Id == id)!;
     }
 
-    public void Delete(int itemId)
+    public void Delete(Item item)
     {
+        DeleteAll(new List<Item> {item});
     }
 
     public void Insert(Item item)
     {
+        InsertAll(new List<Item> {item});
     }
+
+    public void Restore(Item item)                        
+    {
+        RestoreAll(new List<Item> {item});
+    }                                                     
 
     public void Update(Item item)
     {
+        UpdateAll(new List<Item> {item});
     }
 }

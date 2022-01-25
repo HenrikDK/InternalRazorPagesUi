@@ -8,6 +8,29 @@
 <h2>@ViewBag.Title</h2>
 <p>Using a tabulator with inline editing functionality (items can be edited inside the grid).</p>
 
+<div class="row justify-content-md-end">
+    <div class="row col-md-9">
+        <div class="col-md-3">
+            <div class="btn-group" role="group" aria-label="Button group">
+                <button id="btnSave" type="button" class="btn btn-outline-secondary">Save</button>
+                <button id="btnNew" type="button" class="btn btn-outline-secondary">New</button>
+            </div>
+        </div>
+
+        <div class="col input-group rounded">
+            <span class="input-group-text border-0 bg-transparent" id="search-addon">
+                <i class="fa fa-search"></i>
+            </span>
+            <input id="tableSearch" type="search" class="form-control rounded" placeholder="Search .." aria-label="Search" aria-describedby="search-addon"/>
+        </div>
+
+        <div class="col-md-3 form-check">
+            <input class="form-check-input" type="checkbox" name="flexRadioDefault" id="show-all-check">
+            <label class="form-check-label" for="show-all-check">Show all</label>
+        </div>
+    </div>
+</div>
+
 <div id="inline-table" class="vh-80"></div>
 
 <script>
@@ -17,10 +40,13 @@ var table = new Tabulator("#inline-table",
     layout:"fitData",
     persistence:true,
     persistenceMode:true,
+    movableColumns:true,
     ajaxURL:"@currentUrl/?handler=items", 
+    rowFormatter:softDeleteFormatter,
     rowContextMenu: inlineRowMenu,
     placeholder:"No Data Available",
     columns:[
+        {title:"Id", field:"id", sorter:"number", width:90, editor:true, headerMenu:headerMenu},
         {title:"Name", field:"name", sorter:"string", width:200, editor:true, headerMenu:headerMenu},
         {title:"Progress", field:"progress", hozAlign:"left", formatter:"progress", editor:true, headerMenu:headerMenu},
         {title:"Gender", field:"gender", sorter:"string", editor:"select", editorParams:{values:["male", "female"]}, headerMenu:headerMenu},
@@ -29,5 +55,27 @@ var table = new Tabulator("#inline-table",
         {title:"Date Of Birth", field:"dateOfBirth", sorter:"date", hozAlign:"center", editor:true, headerMenu:headerMenu},
         {title:"Driver", field:"driver", hozAlign:"center", formatter:"tickCross", sorter:"boolean", editor:true, headerMenu:headerMenu},
     ],
+});
+
+$('#btnSave').click(function (){
+    var updatedRows = JSON.stringify(table.getData());
+    
+    $.ajax({
+        type: "POST",
+        contentType: "application/json; charset=utf-8",
+        url: "@currentUrl",
+        data: updatedRows,
+        dataType: "json",
+        success: function (data){
+            table.replaceData()
+        },
+        error: function (jqXHR, textStatus, errorThrown){
+            alert("Save failed : " + jqXHR.responseText);
+        }
+    });    
+});
+
+$('#btnNew').click(function (){
+    table.addRow()
 });
 </script>

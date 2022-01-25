@@ -56,7 +56,7 @@ public class BreakoutEditorModel : PageModel
         if (EditMode is EditorMode.Delete)
         {
             using var scope = new TransactionScope();
-            _itemRepository.Delete(Item.Id);
+            _itemRepository.Delete(Item);
             scope.Complete();
             return RedirectToPage("Breakout");
         }
