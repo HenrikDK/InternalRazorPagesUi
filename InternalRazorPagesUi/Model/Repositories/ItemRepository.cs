@@ -38,22 +38,22 @@ public class ItemRepository : IItemRepository
 
     public void DeleteAll(IList<Item> items)
     {
-        throw new NotImplementedException();
+        // Place holder
     }
 
     public void InsertAll(IList<Item> items)
     {
-        throw new NotImplementedException();
+        // Place holder
     }
 
     public void UpdateAll(IList<Item> items)
     {
-        throw new NotImplementedException();
+        // Place holder
     }
 
     public void RestoreAll(IList<Item> items)
     {
-        throw new NotImplementedException();
+        // Place holder
     }
 
     public Item GetBy(int id)
