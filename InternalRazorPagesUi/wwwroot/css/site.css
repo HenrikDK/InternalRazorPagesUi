@@ -189,3 +189,7 @@
 .tabulator-col {
   border-right: 1px solid rgba(34, 36, 38, 0.1) !important;
 }
+
+main * {
+  scroll-margin-top: 100px;
+}
