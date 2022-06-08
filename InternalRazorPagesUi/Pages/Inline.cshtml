@@ -9,34 +9,32 @@
 <p>Using a tabulator with inline editing functionality (items can be edited inside the grid).</p>
 
 <div class="row justify-content-md-end">
-    <div class="row col-md-9">
-        <div class="col-md-3">
-            <div class="btn-group" role="group" aria-label="Button group">
-                <button id="btnSave" type="button" class="btn btn-outline-secondary">Save</button>
-                <button id="btnNew" type="button" class="btn btn-outline-secondary">New</button>
-            </div>
+    <div class="col-md-3">
+        <div class="btn-group" role="group" aria-label="Button group">
+            <button id="btnSave" type="button" class="btn btn-sm btn-outline-secondary">Save</button>
+            <button id="btnNew" type="button" class="btn btn-sm btn-outline-secondary">New</button>
         </div>
+    </div>
 
-        <div class="col input-group rounded">
-            <span class="input-group-text border-0 bg-transparent" id="search-addon">
-                <i class="fa fa-search"></i>
-            </span>
-            <input id="tableSearch" type="search" class="form-control rounded" placeholder="Search .." aria-label="Search" aria-describedby="search-addon"/>
-        </div>
+    <div class="col input-group rounded">
+        <span class="input-group-text border-0 bg-transparent" id="search-addon">
+            <i class="fa fa-search"></i>
+        </span>
+        <input id="tableSearch" type="search" class="form-control form-control-sm rounded" placeholder="Search .." aria-label="Search" aria-describedby="search-addon"/>
+    </div>
 
-        <div class="col-md-3 form-check">
-            <input class="form-check-input" type="checkbox" name="flexRadioDefault" id="show-all-check">
-            <label class="form-check-label" for="show-all-check">Show all</label>
-        </div>
+    <div class="col-md-2 form-check justify-content-md-end">
+        <input class="form-check-input" type="checkbox" id="show-all-check">
+        <label class="form-check-label" for="show-all-check">Show all</label>
     </div>
 </div>
 
-<div id="inline-table" class="vh-80"></div>
+<div id="inline-table" class="vh-70"></div>
 
 <script>
 var table = new Tabulator("#inline-table", 
 {
-    height:"80vh",
+    height:"70vh",
     layout:"fitData",
     persistence:true,
     persistenceMode:true,
