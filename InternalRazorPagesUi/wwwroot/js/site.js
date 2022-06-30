@@ -1,4 +1,6 @@
-﻿$( document ).ready(function() {
+﻿var mixinArray = [];
+
+$( document ).ready(function() {
     updateNavBar();
     restoreSidebarMenu();
     getTabulators();
