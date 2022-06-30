@@ -23,4 +23,5 @@ global using Lamar;
 global using Lamar.Microsoft.DependencyInjection;
 global using Prometheus;
 global using Serilog;
+global using Serilog.Exceptions;
 global using Serilog.Formatting.Json;
