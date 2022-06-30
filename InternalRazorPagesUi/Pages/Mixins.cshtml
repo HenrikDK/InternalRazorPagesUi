@@ -1,0 +1,47 @@
+﻿@page "/vue-mixins"
+@model MultiModel
+@{
+    ViewBag.Title = "Razor page with Vue mixin";
+}
+
+<h2>@ViewBag.Title</h2>
+<p>Combining Razor pages with Vue mixins to increase interactivity.</p>
+
+<p>Message from Vue: {{ message }}</p>
+
+<div class="btn-group" role="group" aria-label="Button group">
+    <button class="btn btn-sm btn-outline-primary" @@click="message = 'lobster is overrated'" v-if="displayButton1">Opinions</button>
+    <button class="btn btn-sm btn-outline-info" @@click="message = 'Hello Vue!'" v-if="displayButton2">Reset</button>
+    <button class="btn btn-sm btn-outline-success" @@click="displayButton1=!displayButton1">Toggle opinions</button><br />
+    <button class="btn btn-sm btn-outline-success" @@click="displayButton2=!displayButton2">Toggle reset</button><br />
+    <button class="btn btn-sm btn-warning" @@click="increment">count is: {{ count }}</button>
+</div>
+
+<br/>
+<br/>
+
+@section Scripts {
+    <script type="module">
+        //Note that these are regular javascript variables not Vue properties 
+        //so they are not reactive.
+        var pageMixin = {
+            data() {
+                return {
+                    //These are reactive.  Changing them will change whether 
+                    //the related button is displayed
+                    count: 0,
+                    displayButton1: true,
+                    displayButton2: false
+                };
+            },
+            methods: {
+            //vue methods can be added here
+                increment() {
+                    this.$data.count++
+                }
+            }
+        };
+
+        mixinArray.push(pageMixin);
+    </script>
+}
