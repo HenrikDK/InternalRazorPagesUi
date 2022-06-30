@@ -1,10 +1,5 @@
 var builder = WebApplication.CreateBuilder(args);
 
-Log.Logger = new LoggerConfiguration()
-    .Enrich.FromLogContext()
-    .WriteTo.Console(new JsonFormatter())
-    .CreateLogger();
-
 builder.Host.UseLamar((context, registry) =>
 {
     registry.Scan(x =>
@@ -19,8 +14,14 @@ builder.WebHost
     .ConfigureKestrel(x => x.ListenAnyIP(8080))
     .ConfigureLogging((context, config) =>
     {
+        var logger = new LoggerConfiguration()
+            .Enrich.FromLogContext()
+            .Enrich.WithExceptionDetails()
+            .WriteTo.Console(new JsonFormatter(renderMessage: true))
+            .CreateLogger();
+        
         config.ClearProviders();
-        config.AddSerilog();
+        config.AddSerilog(logger);
     });
 
 builder.Services.AddMemoryCache();

@@ -1,4 +1,4 @@
-using InternalRazorPagesUi.Model.Cache;
+using InternalRazorPagesUi.Model.Repositories;
 
 namespace InternalRazorPagesUi.ReverseProxy;
 
@@ -9,13 +9,13 @@ public interface IProxyRequest
 
 public class ProxyRequest : IProxyRequest
 {
-  private readonly IGetServicesCached _getServices;
+  private readonly IServiceRepository _serviceRepository;
 
   private static readonly HttpClient _httpClient = new HttpClient(new HttpClientHandler { AllowAutoRedirect = false });
     
-  public ProxyRequest(IGetServicesCached getServices)
+  public ProxyRequest(IServiceRepository serviceRepository)
   {
-    _getServices = getServices;
+    _serviceRepository = serviceRepository;
   }
 
   public async Task<(ProxyPath, HttpResponseMessage)> RequestFromService(HttpContext context, string proxyPrefix = "/sp/")
@@ -46,7 +46,7 @@ public class ProxyRequest : IProxyRequest
     var serviceRequest = segments.First();
     result.RequestServicePath = Url.Combine("/", result.ControllerPrefixPath, serviceRequest);
       
-    var services = _getServices.Execute();
+    var services = _serviceRepository.GetAll();
     if (!services.ContainsKey(serviceRequest)) return result;
 
     var remainingPath = "";

@@ -24,3 +24,6 @@ This application is intended as a simple template for building internal applicat
 - NavBar highlighting based on URL
 - Placeholder for User Login
 - Breakout editor using different bootstrap controls
+
+### Vue 3
+- Combining Vue mixins with razor pages to increase interactivity
