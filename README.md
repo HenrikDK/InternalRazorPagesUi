@@ -27,3 +27,4 @@ This application is intended as a simple template for building internal applicat
 
 ### Vue 3
 - Combining Vue mixins with razor pages to increase interactivity
+- Combining Multiple .cshtml Vue Single File Components (SFC) with razor pages to increase interactivity.
