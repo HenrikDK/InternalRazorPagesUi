@@ -1,0 +1,12 @@
+﻿@page "/vue-spa"
+@model VueSPAModel
+@{
+    ViewBag.Title = "Vue 3 SPA with SFC components";
+}
+
+@section VueComponents {
+    @Html.Partial("Components/_CoffeeMaker")
+    @Html.Partial("Components/_ProgressBar")
+}
+
+<coffee-maker></coffee-maker>

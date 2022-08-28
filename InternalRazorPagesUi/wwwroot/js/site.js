@@ -1,4 +1,5 @@
-﻿var mixinArray = [];
+﻿var globalMixins = [];
+var components = {};
 
 $( document ).ready(function() {
     updateNavBar();
